@@ -103,7 +103,7 @@ Children do not have their own registry ids.
 **Pipeline**
 
 1. **Raw.** `rddt-tier0-metrics1-prod.dauq.baseline_canonical_cube`, filter `is_dauq`, measure `SUM(n_users)`. Same definition as [Daily DAUq Report v2](https://app.hex.tech/reddit/app/Daily-DAUq-Report-v2-033JmYVBjqTdtm70mD94CP/latest) / Ecosystem Health.
-2. **Intermediate.** `dauq_counts_df` — one row per day: `dauq`, `dauq_us` (geo US), `dauq_row` (everyone else, including unknown geo), plus App / Web / geo×surface (used on Supply). **As-of = cube max date**, not ads `latest_date`.
+2. **Intermediate.** `dauq_counts_df` — one row per day: `dauq`, `dauq_us` (geo US), `dauq_row` (everyone else, including unknown geo), plus App / Web / geo×surface (used on Supply). As-of = guarded `latest_date` (the cube’s ready date is an input to that MIN).
 3. **Goals.** [DAUq Master Sheet](https://docs.google.com/spreadsheets/d/1eu21vkHhHYNAFmY_tsxlCe3Gk1Mz_ieYdtZDT41gvXQ) → Latest Forecast. Sheet stores **millions**; Hex stores users. **QTD goal = CQ** (a mean is not paced down).
 4. **Hex.** Family **C**. Status `impressions_pacing` (98 / 96). Grey if the goal is missing. Supply **copies** Total / US / ROW.
 
@@ -118,7 +118,7 @@ Registry name is still `DAUq (QTD), M`. Hex display is `DAUq (QTD), #`. Always j
 **Pipeline**
 
 1. **Raw.** `rddt-ds-data1-prod.subreddit__daily.thriving_communities_v2`.
-2. **Intermediate.** `thriving_communities_df` — daily thriving counts by region and Gold / Silver / Bronze. As-of = series max date.
+2. **Intermediate.** `thriving_communities_df` — daily thriving counts by region and Gold / Silver / Bronze. As-of = guarded `latest_date` (thriving’s ready date is an input to that MIN).
 3. **Hex.** Family **C**, then rounded to an integer. Status `grey`. Region children have status display off.
 
 ---
@@ -156,7 +156,7 @@ Registry name is still `DAUq (QTD), M`. Hex display is `DAUq (QTD), #`. Always j
 
 1. **Raw.** C-performance launch-tracker / A/B actuals sheet (monthly lift vs control).
 2. **Intermediate.** `cats_c_performance_ab_metrics_df`. Goals: C-performance A/B goals sheet, through the Hex rename map, into the consolidator.
-3. **Hex.** Value = **current calendar month**. QTD goal blank. Comps blank or percentage-point (calculation doc §4). Status `ab_goal`.
+3. **Hex.** Value = **current calendar month**. QTD goal blank. MoM / QoQ / YoY must match the KPI tab (today both blank). Status `ab_goal`.
 
 | Display name | Actuals / goals key | Direction |
 |---|---|---|
@@ -178,7 +178,7 @@ Not on this tab: CPV6 A/B, Post-Install CPA (KPI only).
 **Pipeline**
 
 1. **Raw / intermediate.** `c_shopping_performance_ab_df` current quarter (`Shopping ROAS A/B`, `Shopping ROAS A/B Goal`). FY defaults to 0.60 if the sheet is quiet.
-2. **Hex.** Current-quarter lift. Comps blank. Status `ab_goal`. KPI **copies** this object.
+2. **Hex.** Current-quarter lift. KPI **copies** this object, so Value and comps match Company Level (comps blank today). Status `ab_goal`.
 
 ---
 
@@ -200,7 +200,7 @@ Not on this tab: CPV6 A/B, Post-Install CPA (KPI only).
 
 ### Performance A/B (KPI)
 
-Same monthly pipeline as Company Level. Comps **blank**. Display names differ slightly.
+Same monthly pipeline as Company Level. Value and MoM / QoQ / YoY must match Company Level (today both tabs leave comps blank). Display names differ slightly.
 
 | Display name | Actuals col | Goals key | Direction |
 |---|---|---|---|
@@ -486,7 +486,7 @@ The lean table’s max `dt` is **2026-06-02**. Reloading it would print ~100% (c
 **Pipeline**
 
 1. **Raw.** `rddt-tier0-metrics1-prod.wauq.tier0_wauq_reporting`.
-2. **Intermediate.** `wauq_df` → `combined_df` as `wauq`, `us_wauq`, `row_wauq`. As-of = series max date.
+2. **Intermediate.** `wauq_df` → `combined_df` as `wauq`, `us_wauq`, `row_wauq`. As-of = guarded `latest_date` (WAUq’s ready date is an input to that MIN).
 3. **Hex.** Family **C**. Status `grey`.
 
 ---
