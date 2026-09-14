@@ -4,7 +4,9 @@
 
 This is the step-by-step guide for keeping the CATS Scorecard current: what to roll at the start of a quarter, what to check each month, and what to do when a number looks stale.
 
-Most of the dashboard takes care of itself. The 9:00 AM Chicago run refreshes every warehouse-backed row. Your work is the handful of rows that depend on a person updating a Google Sheet, or on a goal that is typed directly into the notebook.
+Most of the dashboard takes care of itself. The 9:00 AM Chicago run re-runs the whole notebook, so it refreshes every warehouse-backed row **and re-reads every connected Google Sheet**. Nothing that lives in a sheet needs you to press a button.
+
+Your work is only the two things the schedule cannot do: confirm that the humans upstream actually updated their sheets, and edit the values that are typed directly into the notebook.
 
 **Working links**
 
@@ -21,11 +23,19 @@ Most of the dashboard takes care of itself. The 9:00 AM Chicago run refreshes ev
 
 This applies to the quarterly run only — it is about confirming the *new quarter's targets*, not about routine monthly work. A goal sheet that has not been rolled looks completely normal in Hex; it simply keeps serving last quarter's target. Nor does a populated sheet mean the targets are settled, since teams revise them through the year. Hex cannot detect either case, so a one-line confirmation from the owner is the only real check.
 
-**2. Run the cell you changed, then the Table cell for that tab. Nothing else.**
+**2. Sheets refresh themselves. Only typed-in values need you.**
+
+If a number lives in a Google Sheet — A/B actuals, Shopping ROAS, Scale, FTE headcount, MAA and DAUq goals — the 9:00 run picks up whatever the sheet says that morning. There is nothing to run. When a sheet-backed row looks wrong, the sheet is the problem, not Hex.
+
+If a number is typed into the notebook — the hard-coded goals, the SOTA grade, the Experimentation count, the weekly Shopping paced target — the schedule can never change it. You edit the draft and publish. That is the entire manual surface of this dashboard.
+
+Running cells by hand is only for seeing a change immediately instead of waiting for tomorrow's 9:00 run.
+
+**3. When you do run cells: run the cell you changed, then the Table cell for that tab. Nothing else.**
 
 | Tab | Metrics cell | Table cell |
 |---|---|---|
-| Company Level Goals | `Comnpany Level Goals df` *(the typo is the real cell name)* | `Company Level Goals Table` |
+| Company Level Goals | `Company Level Goals df` | `Company Level Goals Table` |
 | CATS SC / KPIs | `CATS SC KPIs Metrics` | `CATS SC KPIs Table` |
 | Ads Product & GTM | `Ads Product and GTM Metrics` | `Ads Product and GTM Table` |
 | Ads Supply Drivers | `Ads Supply Drivers Metrics` | `Ads Supply Drivers Table` |
@@ -67,26 +77,28 @@ Do not start Step 1 for a metric until its owner has replied — a populated she
 
 ## Step 1 — Company Level Goals tab
 
-**Goals — do these four.**
+**Goals — do these four.** The three sheet-backed ones would refresh on tomorrow's 9:00 run anyway; you run the cells here so you can confirm the roll landed correctly today rather than finding out a day later.
 
 1. **MAA** — confirm [MAB Goaling 2026](https://docs.google.com/spreadsheets/d/1obYe6RSkOoQG9gDKFJJNRO7FzvLm6LyTX7xXVwiXLdc/edit?gid=908340562) `Daily Goals Allocation` has the new quarter. Run `Maa goals gsheet` → `Maa goals df`.
 2. **DAUq** — confirm [DAUq Master Sheet](https://docs.google.com/spreadsheets/d/1eu21vkHhHYNAFmY_tsxlCe3Gk1Mz_ieYdtZDT41gvXQ/edit?gid=964936431) `Latest Forecast` has the new quarter. Run `DAUq targets gsheet` → `DAUq official targets df`. The sheet is in millions and Hex stores users, so a `45` should land as ~45,000,000.
 3. **A/B goals** — confirm [CATS Roadmap Planning](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236) `KPIs` has the new quarter's column. Run `C performance goals ab gsheet` → `C performance goals ab df` → `C performance goals ad df with cpv`.
-4. **Ad Impressions** — hard-coded, no sheet connection. Read the two full-quarter numbers from [Daily Forecast – Live](https://docs.google.com/spreadsheets/d/1_W3RgdwjMw9MMX9Bq3X99D0VFBFEamgSlUuJuvaxIH0/edit?pli=1&gid=1740552033#gid=1740552033) and add a new key to `IMPRESSIONS_GOALS` in `Comnpany Level Goals df`. The key must match the quarter label exactly, for example `'Q4 2026'`. eCPM goals derive from impressions and revenue and need no edit.
+4. **Ad Impressions** — hard-coded, no sheet connection. Read the two full-quarter numbers from [Daily Forecast – Live](https://docs.google.com/spreadsheets/d/1_W3RgdwjMw9MMX9Bq3X99D0VFBFEamgSlUuJuvaxIH0/edit?pli=1&gid=1740552033#gid=1740552033) and add a new key to `IMPRESSIONS_GOALS` in `Company Level Goals df`. The key must match the quarter label exactly, for example `'Q4 2026'`. eCPM goals derive from impressions and revenue and need no edit.
 
 ```python
 IMPRESSIONS_GOALS = {'Q3 2026': {'US': 59_800_000_000, 'ROW': 57_900_000_000}}
 ```
 
-**Actuals on this tab** — nothing to do at the quarter roll except the A/B pull, which is the monthly task in Part 2.
+**Actuals on this tab** — no action on any of them. Every row here is either warehouse-backed or read from a sheet by the 9:00 run.
 
-| Metric | Actual source | Effort |
-|---|---|---|
-| Tier 2 A/B — CTR, kICR4, PiIR, VVR6, CPC, kCPA | [Ads Launch Review Sign-up Sheet](https://docs.google.com/spreadsheets/d/1rcmx-lOT73K5q19stLt7Io-UijoP9nkMrcrnyNFVu0s/edit?gid=1457726925) | Monthly — run the sheet cells |
-| Shopping ROAS A/B | [Shopping 3H Tracker](https://docs.google.com/spreadsheets/d/1YidL22qkkaKdfbHX6EViyUCnTF2_dnl1vEDdE46obV0/edit?gid=90038934) | Quarterly — run the sheet cells |
-| Ads Realized Revenue, MAA, DAUq, Thriving, Ad Impressions, eCPM | Warehouse | Automatic — no action |
+| Metric | Actual source | Source updates | What you do |
+|---|---|---|---|
+| Tier 2 A/B — CTR, kICR4, PiIR, VVR6, CPC, kCPA | [Ads Launch Review Sign-up Sheet](https://docs.google.com/spreadsheets/d/1rcmx-lOT73K5q19stLt7Io-UijoP9nkMrcrnyNFVu0s/edit?gid=1457726925) | Weekly | Nothing |
+| Shopping ROAS A/B | [Shopping 3H Tracker](https://docs.google.com/spreadsheets/d/1YidL22qkkaKdfbHX6EViyUCnTF2_dnl1vEDdE46obV0/edit?gid=90038934) | Weekly | Nothing |
+| Ads Realized Revenue, MAA, DAUq, Thriving, Ad Impressions, eCPM | Warehouse | Daily | Nothing |
 
-**Then run:** `Comnpany Level Goals df` → `Company Level Goals Table`.
+The one thing that silently breaks the A/B rows is a **renamed label** in the tracker, which blanks the goal without any warning. See the [note on Post-Install CPA](#a-note-on-post-install-cpa-and-cpa-ab).
+
+**Then run:** `Company Level Goals df` → `Company Level Goals Table`.
 
 ---
 
@@ -105,15 +117,16 @@ This tab carries the most hard-coded goals. All of them live in `CATS SC KPIs Me
 
 Scale goals come from the [pillar doc](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt), not the notebook. Confirm with Virgilio that the new quarter's targets are set.
 
-**Actuals on this tab**, hardest first. The top three are the monthly work in Part 2.
+**Actuals on this tab**, most hands-on first. Only the two Scale rows at the top need a person.
 
-| Metric | Actual source | Effort |
-|---|---|---|
-| Scale — all 5 rows | Pillar sheets and a dashboard | Monthly — the most hands-on rows on the scorecard |
-| Revenue / S+M FTE | [Rev / S+M FTE gsheet](https://docs.google.com/spreadsheets/d/1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk/edit?gid=971510625) + warehouse revenue | Monthly — run the sheet cells |
-| A/B lifts, incl. Post-Install CPA | [Ads Launch Review Sign-up Sheet](https://docs.google.com/spreadsheets/d/1rcmx-lOT73K5q19stLt7Io-UijoP9nkMrcrnyNFVu0s/edit?gid=1457726925) | Monthly — run the sheet cells |
-| Shopping ROAS A/B | [Shopping 3H Tracker](https://docs.google.com/spreadsheets/d/1YidL22qkkaKdfbHX6EViyUCnTF2_dnl1vEDdE46obV0/edit?gid=90038934) | Quarterly — run the sheet cells |
-| Upper Funnel, Shopping Revenue, Measured Revenue, HQ Signal, gROAS, MAA, Reach / Frequency / Depth, Retention | Warehouse and Hex components | Automatic — no action |
+| Metric | Actual source | Source updates | What you do |
+|---|---|---|---|
+| Experimentation Velocity · Ads SOTA ML | A dashboard and the pillar doc — **not connected to Hex** | Monthly | **Type the value in.** See Part 2 |
+| Operational Excellence · Cloud Savings · Model Velocity | Pillar sheets | Monthly | Confirm the sheet has the new month — the read is automatic |
+| Revenue / S+M FTE | [Rev / S+M FTE gsheet](https://docs.google.com/spreadsheets/d/1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk/edit?gid=971510625) + warehouse revenue | Monthly | Confirm the sheet has the new month |
+| A/B lifts, incl. Post-Install CPA | [Ads Launch Review Sign-up Sheet](https://docs.google.com/spreadsheets/d/1rcmx-lOT73K5q19stLt7Io-UijoP9nkMrcrnyNFVu0s/edit?gid=1457726925) | Weekly | Nothing |
+| Shopping ROAS A/B | [Shopping 3H Tracker](https://docs.google.com/spreadsheets/d/1YidL22qkkaKdfbHX6EViyUCnTF2_dnl1vEDdE46obV0/edit?gid=90038934) | Weekly | Nothing |
+| Upper Funnel, Shopping Revenue, Measured Revenue, HQ Signal, gROAS, MAA, Reach / Frequency / Depth, Retention | Warehouse and Hex components | Daily | Nothing |
 
 **Then run:** `CATS SC KPIs Metrics` → `CATS SC KPIs Table`.
 
@@ -153,7 +166,9 @@ Publish once the draft looks right, then record what you changed in the **Change
 
 # Part 2 — Monthly upkeep
 
-Run this after the pillar teams close the month, usually in the first week. Expect about 30 minutes. Only the **CATS SC / KPIs** tab needs work — every other tab is warehouse-backed and refreshes on the 9:00 run.
+Run this after the pillar teams close the month, usually in the first week. Expect about 20 minutes, most of it reading sheets rather than editing Hex. Only the **CATS SC / KPIs** tab needs attention.
+
+Monthly upkeep is mostly **verification**: the sheets are re-read automatically every morning, so your job is to confirm the pillar teams actually published a new month. The only edits are the two Scale rows that are not connected to Hex at all.
 
 ## Scale Our Foundations — actuals, not goals
 
@@ -173,11 +188,12 @@ Run this after the pillar teams close the month, usually in the first week. Expe
 
 ### Steps
 
-1. Confirm a new month-end row exists in each sheet. If not, ask Nikhil — do not type a number into Hex.
-2. Run the source cells above, then `Scale foundations actuals`.
-3. Read the Experimentation Velocity count off the dashboard and type it in; update the SOTA grade if it changed.
-4. Run `CATS SC KPIs Metrics` → `CATS SC KPIs Table`.
-5. Confirm the "as of" month in each row title moved forward.
+1. Confirm a new month-end row exists in the three pillar sheets. If one is missing, ask Nikhil — do not type a number into Hex to cover for it.
+2. Read the Experimentation Velocity count off the dashboard and type it into `CATS SC KPIs Metrics`; update the SOTA grade if the pillar published a new one.
+3. Run `CATS SC KPIs Metrics` → `CATS SC KPIs Table`, then publish.
+4. Confirm the "as of" month in each row title moved forward.
+
+Step 3 exists only because of the typed-in values in step 2. If nothing needed typing, there is nothing to run — the three sheet-backed rows will have refreshed on their own.
 
 **The trap:** when a sheet cannot be read, these rows fall back to a saved **checksum** and still display a plausible number. A row that never changes month over month is the signal. Treat a checksum as missing data, not an actual.
 
@@ -185,9 +201,7 @@ Run this after the pillar teams close the month, usually in the first week. Expe
 
 **Goal owner: Aaron Nelson. Monthly FTE: Nick Asaad.** Revenue comes from the warehouse; headcount comes from a sheet.
 
-1. Confirm the new month is in the [Rev / S+M FTE gsheet](https://docs.google.com/spreadsheets/d/1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk/edit?gid=971510625).
-2. Run `Rev FTE gsheet` → `Rev FTE df` → `Rev FTE actuals`.
-3. Run `CATS SC KPIs Metrics` → `CATS SC KPIs Table`.
+Confirm the new month is in the [Rev / S+M FTE gsheet](https://docs.google.com/spreadsheets/d/1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk/edit?gid=971510625). That is the whole task — the 9:00 run reads the sheet and rebuilds the row. Nothing to edit, nothing to run.
 
 The row title reads `(LTM as of <month>)` and should show the last month that has headcount. If headcount has not landed, leave it — pairing newer revenue with older headcount produces a wrong number, not a fresher one.
 
@@ -248,7 +262,7 @@ Start with the clock before investigating any single metric. Open the draft and 
 | `WARN systemic freshness incident` | Most sources are behind — a warehouse-wide problem | Do not trust pacing colours; flag before anyone reads the numbers |
 | A Scale row matches last month exactly | The sheet was not updated, or the pull failed back to a checksum | Check the sheet, then ask Nikhil |
 | An A/B goal is suddenly blank | A label in the goals sheet was renamed and no longer matches the canonical map | Compare the sheet label against the map in `C performance goals ad df with cpv`. See the note below. |
-| A goal column looks like last quarter's | The sheet was never rolled | Confirm with the owner, roll the sheet, re-run its source cells |
+| A goal column looks like last quarter's | The sheet was never rolled | Confirm with the owner and get the sheet rolled. The next 9:00 run picks it up; run its source cells if you need to see it today |
 | Shopping pacing colour looks wrong | `shop_qtd_goal` is a stale weekly target | Read the current week's value from column AO of the [pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) and update both Metrics cells |
 | Budget Utilization is empty | Intentional — source table died 2 June 2026 | Leave it. Dana owns replace-or-retire |
 
@@ -291,11 +305,11 @@ Two things it does not cover: Hex project access and publishing sit with the cur
 
 **Monthly**
 
-- [ ] Scale sheets have a new month; `Scale foundations actuals` re-run
-- [ ] Experimentation Velocity count read off the dashboard; SOTA grade checked
+- [ ] The three Scale pillar sheets have a new month-end row
+- [ ] Experimentation Velocity count read off the dashboard and typed in; SOTA grade checked
 - [ ] No Scale row is sitting on a checksum
-- [ ] FTE sheet has the new month; `Rev FTE actuals` re-run
-- [ ] KPIs table re-run and reviewed
+- [ ] FTE sheet has the new month
+- [ ] If anything was typed in: KPIs metrics → table re-run, and published
 
 **Weekly**
 
