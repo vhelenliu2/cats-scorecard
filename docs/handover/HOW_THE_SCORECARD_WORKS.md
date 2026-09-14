@@ -110,7 +110,7 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 |---|---|---|---|
 | **Scale** (five rows) | The pillar sheet has the new month | The Scale sheet cells, then the KPI metrics cell and its table | The “as of” month moved. A known checksum means the pin failed — not a new month |
 | **Rev/FTE** | The headcount pin has the new month | KPI metrics cell and its table | The date is the last month with headcount. Do not pair later partial revenue with last month’s headcount |
-| **A/B** | The sheet has this month (or this quarter). If a label changed, update the Hex name map and the tracker name together | The A/B sheet cells, then Company Level and KPI metrics + tables for the rows you changed | Goals and values look current. Watch `Price: Post-Install CPA` (goals key is `CPA A/B`) |
+| **A/B** | The sheet has this month (or this quarter). If a label changed, add the alias in Hex **Canonical Metric Map** and align the launch tracker column name | Run **C performance goals ab gsheet** → **C performance goals ad df with cpv**, then the affected **Metrics** → **Table** cells | Goals and values look current. Watch `Price: Post-Install CPA` → key `Post-Install CPA A/B` |
 | **MAA / DAUq goals** | MAB Daily Goals Allocation and DAUq Latest Forecast are on the new quarter | Those sheet cells, then Company Level metrics + table | The goal column matches the sheet. The DAUq sheet is in **millions**; Hex stores **users** |
 | **Goals in the notebook** | The metrics cell has the new quarter / weekly / waypoint | Edit that cell, then its table (and GTM if the playbook says the row is rebuilt) | The goal column changed. Editing the tracker sheet does **not** move the app |
 | **Budget** | No replacement source yet | — | Leave empty. Do not reload the June table |
@@ -165,7 +165,7 @@ These can look fine after a clean morning run and still be stale.
 - **Owner:** Christa Benton
 - **What the Value is:** this **calendar month’s** lift versus control, from the launch-tracker sheet. The sheet has one number per month. Hex does **not** add those months up, and it does **not** average them.
 - **What the goal is:** the **quarter** target on that same sheet. Color compares this month’s lift to that full-quarter goal — not to a day-elapsed QTD bar. See [A/B color](#ab-color).
-- **Watch for:** Hex maps sheet labels to scorecard names. A missed rename leaves the goal **blank** and nothing alarms. `Price: Post-Install CPA` → goals key `CPA A/B` is the rename that breaks most often.
+- **Watch for:** Hex maps sheet labels to scorecard names. A missed rename leaves the goal **blank** and nothing alarms. `Price: Post-Install CPA` → `Post-Install CPA A/B` is the rename that breaks most often.
 - **Shopping ROAS A/B** is the same color rule, but its sheet is one row per **quarter**, so Value is this quarter’s lift — not a monthly one. That is a different row from [Shopping Revenue](#rows-that-do-not-follow-these).
 
 ### Goals we typed in code
@@ -357,7 +357,7 @@ Scale still uses `goal_binary`, but each row’s bar is its own pacing rule — 
 |---|---|
 | A daily source is late | If lag ≤ 3 days, the clock may move back slightly. If lag > 3 days, that source goes off the clock and its metrics show `—` with a tab banner. The 9:00 run can still succeed |
 | Google Sheets is down | MAA, DAUq, A/B, or Scale goals go grey, or we keep the last successful pull |
-| A planning-sheet row was renamed | A/B goals vanish. `Price: Post-Install CPA` is the usual miss |
+| A planning-sheet row was renamed | A/B goals vanish. `Price: Post-Install CPA` must map to `Post-Install CPA A/B` |
 | The quarter sheet was not rolled | Last quarter’s target, looking current |
 | A typed-in goal was not updated | Impressions, Shopping weekly, Measured, Scale checksums, Rev/FTE Q4 |
 | A Scale pin failed | A checksum. The row looks fine |
