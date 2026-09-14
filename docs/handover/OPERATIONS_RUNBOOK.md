@@ -19,6 +19,13 @@ Your work is only two things the schedule cannot do: confirm upstream sheets wer
 
 ## Two rules before you start
 
+| Cadence | When | Who | What |
+|---|---|---|---|
+| **Daily** | 9:00 AM Chicago auto-run | — | Nothing — warehouse + sheets refresh. Investigate only if a row looks wrong. |
+| **Weekly** | After Vinay's team updates pacing | **Vinay Sridhar** (sheet) · **You** (verify) | Confirm [pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) col **AO** has the current week — no Hex edit. |
+| **Monthly** | First week after month close (~20 min) | **Nikhil Khanted** (Scale actuals) · **Nick Asaad** (FTE sheet) · **You** (verify) | Confirm Scale sources + FTE month landed. See [Part 2](#part-2--monthly-upkeep) and [Scale Actuals](#actuals). Edit Hex only for Exp fallback or SOTA grade. |
+| **Quarterly** | Week 1 of new quarter (~half day) | **Metric owners** ([Step 0](#step-0--confirm-the-new-quarters-goals-with-each-owner)) · **You** (roll) | Owners confirm goals are final → run quarter-roll cell chains → publish Hex → Change Log. |
+
 **1. At the quarter roll, confirm goals with their owners before you touch Hex.**
 
 This applies to the quarterly run only — it is about confirming the *new quarter's targets*, not about routine monthly work. A goal sheet that has not been rolled looks completely normal in Hex; it simply keeps serving last quarter's target. Nor does a populated sheet mean the targets are settled, since teams revise them through the year. Hex cannot detect either case, so a one-line confirmation from the owner is the only real check.
