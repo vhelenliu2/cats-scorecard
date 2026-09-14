@@ -1,6 +1,6 @@
 # How the CATS Scorecard works
 
-**As of:** 10 September 2026
+**As of:** 14 September 2026
 
 The scorecard is a Hex app. It rebuilds every morning at **9:00 AM Chicago time**.
 
@@ -36,15 +36,16 @@ Use the jump list. You do not have to read this in order.
 
 These will look surprising in review. They are **intentional**.
 
-### Choice: we wait for every daily source
+### Choice: one broken table does not freeze the whole scorecard
 
-The app prints one date: the latest day that **all** daily tables can support.
+The app prints one **Data clock** date (`latest_date`). It is **not** today and it is **not** “whatever ads revenue landed last.”
 
-- Not “today.”
-- Not “the last ads-revenue day.”
-- If shopping or the DAUq cube is a day behind, the **whole** scorecard moves back.
+A source that is a day or two behind no longer pulls every row back. Instead:
 
-That way a quarter-to-date sum never mixes a complete day with a missing one.
+- Sources within **3 days** of the freshest table stay **on the clock** and set `latest_date`.
+- A source **more than 3 days** behind goes **off the clock** — only its own metrics blank (`—`), with an orange banner on the tab.
+
+QTD math still uses one shared `latest_date` so rows on the clock never mix a full day with a gap.
 
 ### Scale updates once a month
 
@@ -69,16 +70,7 @@ Last-twelve-months ads revenue ÷ average billable Sales + Marketing headcount.
 
 > If a failed pull shows `0`, that is a **bug**. It will look like the metric landed at zero.
 
-### Same A/B metric → same value
-
-The two tabs do **not** have to show the same A/B rows.
-
-- Company Level has the Tier 2 set (CTR, kICR4, PiIR, VVR6, CPC, kCPA, Shopping ROAS)
-- KPI adds **Post-Install CPA** and may keep its own labels (`kiCR4`, `PilR`)
-
-If both tabs show the **same underlying metric**, they show the same **Value**, CQ / FY goals, and status. Labels may differ (`kiCR4` / `kICR4`, `PilR` / `PiIR`). **Post-Install CPA** is on KPI only.
-
-**A/B color** (same rule on both tabs):
+### A/B color
 
 - **Quarter goal already hit** → green, any month
 - **Last month of the quarter** (last 15 days) → green ≥95% of CQ, yellow 70–95%, red <70%
@@ -118,7 +110,7 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 |---|---|---|---|
 | **Scale** (five rows) | The pillar sheet has the new month | The Scale sheet cells, then the KPI metrics cell and its table | The “as of” month moved. A known checksum means the pin failed — not a new month |
 | **Rev/FTE** | The headcount pin has the new month | KPI metrics cell and its table | The date is the last month with headcount. Do not pair later partial revenue with last month’s headcount |
-| **A/B** | The sheet has this month (or this quarter). If a label changed, update the Hex name map and the tracker name together | The A/B sheet cells, then **both** Company Level and KPI metrics + tables | Same metric, same value on both tabs. Watch `Price: Post-Install CPA` (goals key is `CPA A/B`) |
+| **A/B** | The sheet has this month (or this quarter). If a label changed, update the Hex name map and the tracker name together | The A/B sheet cells, then Company Level and KPI metrics + tables for the rows you changed | Goals and values look current. Watch `Price: Post-Install CPA` (goals key is `CPA A/B`) |
 | **MAA / DAUq goals** | MAB Daily Goals Allocation and DAUq Latest Forecast are on the new quarter | Those sheet cells, then Company Level metrics + table | The goal column matches the sheet. The DAUq sheet is in **millions**; Hex stores **users** |
 | **Goals in the notebook** | The metrics cell has the new quarter / weekly / waypoint | Edit that cell, then its table (and GTM if the playbook says the row is rebuilt) | The goal column changed. Editing the tracker sheet does **not** move the app |
 | **Budget** | No replacement source yet | — | Leave empty. Do not reload the June table |
@@ -139,7 +131,7 @@ Hex does **not** read these from a sheet. You edit the metrics cell:
 - [ ] Data clock looks right
 - [ ] Scale and Rev/FTE show a **finished month**
 - [ ] `0` means zero; a dash means missing
-- [ ] The same metric on two tabs **matches**
+- [ ] Shopping Revenue and Measured Revenue **match** on KPI and GTM
 
 ---
 
@@ -172,10 +164,8 @@ These can look fine after a clean morning run and still be stale.
 
 - **Owner:** Christa Benton
 - **What the Value is:** this **calendar month’s** lift versus control, from the launch-tracker sheet. The sheet has one number per month. Hex does **not** add those months up, and it does **not** average them.
-- **What the goal is:** the **quarter** target on that same sheet. Color compares this month’s lift to that full-quarter goal — not to a day-elapsed QTD bar. See [A/B color](#same-ab-metric--same-value).
-- **Watch for:** Hex maps sheet labels to scorecard names. A missed rename leaves the goal **blank** and nothing alarms
-- **Same metric → same value:** CTR, conversion-rate lift, install-rate lift, VVR6, CPC, kCPA, Shopping ROAS. Labels may differ (`kiCR4` / `kICR4`, `PilR` / `PiIR`)
-- **KPI-only:** Post-Install CPA (goals key is `CPA A/B` — the rename that breaks most often)
+- **What the goal is:** the **quarter** target on that same sheet. Color compares this month’s lift to that full-quarter goal — not to a day-elapsed QTD bar. See [A/B color](#ab-color).
+- **Watch for:** Hex maps sheet labels to scorecard names. A missed rename leaves the goal **blank** and nothing alarms. `Price: Post-Install CPA` → goals key `CPA A/B` is the rename that breaks most often.
 - **Shopping ROAS A/B** is the same color rule, but its sheet is one row per **quarter**, so Value is this quarter’s lift — not a monthly one. That is a different row from [Shopping Revenue](#rows-that-do-not-follow-these).
 
 ### Goals we typed in code
@@ -225,23 +215,44 @@ Most rows read their **own** source so a late series cannot slide another metric
 
 ### Data clock
 
-```
-latest date = the earliest “ready” day among ads, DAUq, and WAUq
-```
+Built in the Hex cell **`Quarter dates based on latest date`**. It reads three freshness SQL frames: ads (`latest_date_df`), DAUq (`dauq_date_freshness_df`), WAUq (`wauq_date_freshness_df`). Each row is one warehouse source and its **max ready** date.
 
-- The ads side already takes the earliest ready day among its own tables (revenue, brand, thriving, shopping, and so on).
-- DAUq and WAUq sit on other warehouse connections, so they have their own checks.
-- **“Days into the quarter”** uses this guarded date, not the calendar.
+**The math (in plain terms)**
 
-If a freshness query comes back empty, Hex warns and falls back. Treat that as a **clock problem**, not a metric change.
+| Term | Meaning |
+|---|---|
+| **Leading edge** | The freshest `max ready` date any source has reached |
+| **Lag** | How many days a source sits behind the leading edge |
+| **Current** | Lag ≤ **3 days** — this source counts toward the clock |
+| **Lagging** | Lag > 3 days — off the clock; guarded metrics show `—` |
+| **`latest_date`** | The **earliest** `max ready` among **current** sources |
 
-Some rows then apply a **tighter window** on top of that date — that is **not** a second clock:
+The clock can sit at most **3 days** behind the leading edge. Weekend and holiday pipeline jitter stays on the clock; a genuinely broken table does not.
 
-- **Retention** waits 28 or 91 days
-- **Scale** and **Rev/FTE** use the last finished planning month
-- **MixShift** uses the last finished month and a 7-day bake
+**What you see on a run**
 
-| Source | We treat it as ready when |
+The cell prints `latest_date`, `leading_edge`, and a per-source table (`role`, which source `← sets clock`, which `← off clock, dependent metrics blank`).
+
+- **`data_delayed`** when `latest_date` < `leading_edge` — the app still publishes; lagging sources are handled per metric.
+- **Orange tab banner** names metrics blanked for staleness and which source is behind.
+- **`WARN systemic freshness incident`** when most sources are lagging — treat pacing colors as unreliable.
+
+**What to do**
+
+1. Read the cell output before debugging a single metric.
+2. One `lagging` source → expect `—` on its metrics only.
+3. To refresh the clock: run the three freshness SQL cells + **`Quarter dates based on latest date`**. Do not rerun the whole notebook.
+
+**Not the shared daily clock** (these use their own as-of rules):
+
+- **Measured Revenue** — sums through the component’s own latest day (a few days behind ads is normal)
+- **Scale** and **Rev/FTE** — last finished planning month
+- **Retention** — 28- or 91-day bake after the clock
+- **MixShift** — last finished month + 7-day bake
+
+**How each source gets its max ready date**
+
+| Source | Ready when |
 |---|---|
 | Ads realized revenue | Latest day with non-zero revenue |
 | Brand pillar | Latest day with non-zero brand revenue |
@@ -251,6 +262,8 @@ Some rows then apply a **tighter window** on top of that date — that is **not*
 | Shopping impressions, rolling revenue, HQ scores, RFD, E2E | Latest date folder that has rows |
 | DAUq cube | Latest day in the last two weeks with DAUq users > 0 |
 | WAUq reporting | Latest day in the last two weeks with WAUq > 0 |
+
+**“Days into the quarter”** and QTD pacing use `latest_date`, not the calendar.
 
 ### How percent change is calculated
 
@@ -342,7 +355,7 @@ Scale still uses `goal_binary`, but each row’s bar is its own pacing rule — 
 
 | What went wrong | What you will see |
 |---|---|
-| A daily source is late | The Data clock moves back. The 9:00 run can still succeed |
+| A daily source is late | If lag ≤ 3 days, the clock may move back slightly. If lag > 3 days, that source goes off the clock and its metrics show `—` with a tab banner. The 9:00 run can still succeed |
 | Google Sheets is down | MAA, DAUq, A/B, or Scale goals go grey, or we keep the last successful pull |
 | A planning-sheet row was renamed | A/B goals vanish. `Price: Post-Install CPA` is the usual miss |
 | The quarter sheet was not rolled | Last quarter’s target, looking current |
@@ -354,4 +367,4 @@ Scale still uses `goal_binary`, but each row’s bar is its own pacing rule — 
 1. Is this a [quarter sum, a 28-day level, or a quarter average](#how-the-value-is-built) — or an [exception](#rows-that-do-not-follow-these)?
 2. Should the date be the Data clock, or a finished month?
 3. Is the goal from a sheet, from days elapsed, or from a number in the code?
-4. If two tabs show the **same metric** (even under a slightly different label), the **value** must match.
+4. If a row is rebuilt on two tabs (e.g. Shopping Revenue, Measured Revenue), do the **values** match?
