@@ -1,6 +1,6 @@
 # CATS Scorecard
 
-**As of:** 10 September 2026
+**As of:** 14 September 2026
 
 The scorecard is a Hex app. It rebuilds at **9:00 AM Chicago time**.
 
@@ -19,8 +19,10 @@ Read in this order. Stop when you have what you need.
 | # | Document | What it is |
 |---|---|---|
 | 1 | This page | Links |
-| 2 | [How the scorecard works](HOW_THE_SCORECARD_WORKS.md) | Operating manual — clock, refresh, colors, exceptions |
-| 3 | [Metric playbook](METRIC_PLAYBOOK.md) | One card per live row — owner, source, how the number is built |
+| 2 | [Operations runbook](OPERATIONS_RUNBOOK.md) | Step-by-step: quarter roll, monthly upkeep, what to run, who to ask |
+| 3 | [How the scorecard works](HOW_THE_SCORECARD_WORKS.md) | Why the numbers behave as they do — clock, colors, deliberate exceptions |
+| 4 | [Metric playbook](METRIC_PLAYBOOK.md) | One card per live row — owner, source, how the number is built |
 
-- A number looks off, or Scale / a goal needs this month’s pull → **manual**
+- You need to update the scorecard for a new quarter or a new month → **runbook**
+- A number looks wrong and you want to know whether it is intentional → **how it works**
 - You need one metric’s owner or warehouse table → **playbook** (search the list)
