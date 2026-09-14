@@ -112,19 +112,26 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 | **Rev/FTE** | The headcount pin has the new month | KPI metrics cell and its table | The date is the last month with headcount. Do not pair later partial revenue with last month’s headcount |
 | **A/B** | The sheet has this month (or this quarter). If a label changed, add the alias in Hex **Canonical Metric Map** and align the launch tracker column name | Run **C performance goals ab gsheet** → **C performance goals ad df with cpv**, then the affected **Metrics** → **Table** cells | Goals and values look current. Watch `Price: Post-Install CPA` → key `Post-Install CPA A/B` |
 | **MAA / DAUq goals** | MAB Daily Goals Allocation and DAUq Latest Forecast are on the new quarter | Those sheet cells, then Company Level metrics + table | The goal column matches the sheet. The DAUq sheet is in **millions**; Hex stores **users** |
-| **Goals in the notebook** | The metrics cell has the new quarter / weekly / waypoint | Edit that cell, then its table (and GTM if the playbook says the row is rebuilt) | The goal column changed. Editing the tracker sheet does **not** move the app |
+| **Sheet-backed KPI goals** | Roadmap KPIs, pacing sheet, brand feed, Rev/FTE sheet updated | Run goals chain → KPI Metrics → Table at quarter roll (9:00 run handles daily) | Goal columns match sheets |
+| **Notebook constants only** | Impressions, HQ, Scale fallbacks, `_EXP_COUNTS`, `_SOTA_BY_Q` | Edit the named cell, then its table | Goal column changed |
 | **Budget** | No replacement source yet | — | Leave empty. Do not reload the June table |
 
-### Goals that live in the notebook
+### Goals that auto-pull from sheets (9:00 run)
 
-Hex does **not** read these from a sheet. You edit the metrics cell:
+- **Shopping Revenue** — CQ/FY from Roadmap `KPIs` tab; paced QTD from the shopping pacing sheet (column AO, current week)
+- **Overall Measured Revenue** — quarterly steps + FY from Roadmap `KPIs` tab
+- **Upper Funnel Revenue** — brand pillar feed (`upper_funnel_revenue_df`)
+- **Rev/FTE** — LTM waypoints from the Rev/FTE planning sheet
+- **A/B lifts** — Roadmap `KPIs` tab (same chain as Company Level)
+- **Scale** — linear pacing in `Scale foundations actuals` from roadmap rates + sheet/SQL actuals
 
-- Impressions
-- Shopping’s weekly quarter-to-date target
-- Measured Revenue’s quarterly steps — $200 / $350 / $450 / $500M
-- Upper Funnel — $310M / $1.1B
-- Rev/FTE’s fourth-quarter waypoint *(not set)*
-- Scale’s fallback checksums
+### Goals still typed in the notebook
+
+- Ad Impressions (`IMPRESSIONS_GOALS`)
+- HQ Signal *(reference only; no source)*
+- Experimentation `_EXP_COUNTS` when SQL is down
+- SOTA `_SOTA_BY_Q` when the pillar doc grade changes
+- Occasional Scale goal-rate or fallback constants
 
 ### After the morning run — check these
 
@@ -170,15 +177,13 @@ These can look fine after a clean morning run and still be stale.
 
 ### Goals we typed in code
 
-Editing the tracker sheet does **nothing** to these. You edit the metrics cell:
+Only these ignore sheet updates — you edit the named Hex cell:
 
 - Impressions
-- Shopping quarter-to-date
-- Measured Revenue
-- Upper Funnel
-- HQ *(reference only)*
-- Rev/FTE waypoints
-- Scale checksums
+- HQ Signal *(reference only)*
+- Experimentation `_EXP_COUNTS` when SQL is down
+- SOTA `_SOTA_BY_Q` when the pillar grade changes
+- Scale fallbacks when a sheet pull fails
 
 ### Sheets that need a quarter roll
 
@@ -323,7 +328,7 @@ Hex picks a color from the row’s **status strategy** (`status_goal`). Live tab
 | Impressions; DAUq total / US / ROW | `impressions_pacing` | ≥98% | 96–98% | <96% |
 | Upper Funnel | `goal_rev_2m` | ≥99.5% | another $2M would hit | else |
 | Measured Revenue | `goal_rev_5m` | ≥99.5% | another $5M would hit | else |
-| Shopping Revenue | `shopping_pace` | ≥85% of the weekly target | 70–85% | <70% |
+| Shopping Revenue — KPI tab only; the GTM copy is grey | `shopping_pace` | ≥85% of the weekly target | 70–85% | <70% |
 | A/B (both tabs) | `ab_goal` | CQ already hit, or last 15 days of the quarter and ≥95% | last 15 days, 70–95% | last 15 days <70%; **earlier = grey** |
 | MixShift iCR; New advertisers; Monetizable feed / PDP | `yoy` | YoY moving the right way (0.5% buffer) | — | else |
 | Booking to Quota | `booking_quota` | Week of quarter 55% / 80% / 95% | 50 / 75 / 90 | else |
@@ -334,13 +339,15 @@ Hex picks a color from the row’s **status strategy** (`status_goal`). Live tab
 
 Scale still uses `goal_binary`, but each row’s bar is its own pacing rule — see [Scale](#scale).
 
+Any row can fall back to grey regardless of its strategy: a stale source, a pacing that cannot be computed, or a governance flag of Missing / Stale / Blocked all override the colour. That is why Company Level DAUq paces normally while the Supply-tab copies of DAUq and Impressions are always grey — the Supply rows are display duplicates and their goals live on Company Level. The full precedence order is in the [operations runbook](OPERATIONS_RUNBOOK.md#status-colours--how-they-are-decided).
+
 ### Rows that do not follow these
 
 | Row | What’s different |
 |---|---|
 | **Scale** | Monthly sheets. Each row has its own shape (a level, a year-to-date, a count, or a grade). OE “QoQ” = this month-end vs the last month of last quarter. See [Scale](#scale) |
 | **Rev/FTE** | Monthly last-twelve-months level. MoM / QoQ / YoY = that level vs **1 / 3 / 12 months** earlier. See [Rev/FTE](#revfte) |
-| **Shopping Revenue** | The dollar **actual** does add up the quarter (R28 MoM, same-elapsed QoQ). Two things do not: **YoY** is year-to-date vs the same calendar day last year, and the in-quarter **goal** is a weekly target we typed in — not CQ × days elapsed. This is **not** the Shopping ROAS A/B row. |
+| **Shopping Revenue** | The dollar **actual** does add up the quarter (R28 MoM, same-elapsed QoQ). **YoY** is year-to-date vs the same calendar day last year. The in-quarter **paced goal** comes from the pacing sheet (column AO) — not CQ × days elapsed. This is **not** the Shopping ROAS A/B row. |
 | **A/B lifts** | Value is this **month’s** lift from the tracker (one number per calendar month — we do not sum or average the quarter). MoM / QoQ / YoY stay **blank**. The **goal** is still the quarter target; color compares this month’s lift to that full-quarter goal (green if already hit; last month 95 / 70; otherwise grey). **Shopping ROAS A/B** uses the same color rule, but its sheet is one row per quarter. See [A/B](#ab-lifts) |
 | **Reach / Frequency / Depth** | Snapshot on as-of. **MoM blank.** QoQ / YoY = same day-of-quarter in the prior quarter / prior year |
 | **Retention** | Share still active after a 28- or 91-day wait. Comps are **percentage points** vs 1 / 3 / 12 months earlier (on the baked as-of) |
@@ -359,7 +366,8 @@ Scale still uses `goal_binary`, but each row’s bar is its own pacing rule — 
 | Google Sheets is down | MAA, DAUq, A/B, or Scale goals go grey, or we keep the last successful pull |
 | A planning-sheet row was renamed | A/B goals vanish. `Price: Post-Install CPA` must map to `Post-Install CPA A/B` |
 | The quarter sheet was not rolled | Last quarter’s target, looking current |
-| A typed-in goal was not updated | Impressions, Shopping weekly, Measured, Scale checksums, Rev/FTE Q4 |
+| A typed-in goal was not updated | Impressions, HQ, Scale fallbacks, `_EXP_COUNTS`, `_SOTA_BY_Q` |
+| A sheet-backed goal looks stale | Roadmap KPIs, pacing sheet, brand feed, or Rev/FTE sheet not rolled/updated |
 | A Scale pin failed | A checksum. The row looks fine |
 
 **Then ask:**
