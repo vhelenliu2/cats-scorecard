@@ -23,7 +23,7 @@ Your work is only two things the schedule cannot do: confirm upstream sheets wer
 |---|---|---|---|
 | **Daily** | 9:00 AM Chicago auto-run | — | Nothing — warehouse + sheets refresh. Investigate only if a row looks wrong. |
 | **Weekly** | After Vinay's team updates pacing | **Vinay Sridhar** (sheet) · **You** (verify) | Confirm [pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) col **AO** has the current week — no Hex edit. |
-| **Monthly** | First week after month close (~20 min) | **Nikhil Khanted** (Scale actuals) · **Nick Asaad** (FTE sheet) · **You** (verify) | Confirm Scale sources + FTE month landed. See [Part 2](#part-2--monthly-upkeep) and [Scale Actuals](#actuals). Edit Hex only for Exp fallback or SOTA grade. |
+| **Monthly** | First week after month close (~20 min) | **Nikhil Khanted** (Scale actuals) · **Nick Asaad** (FTE sheet) · **You** (verify) | Confirm Scale sources + FTE month landed. See [Part 2](#part-2--monthly-upkeep) and [Scale Actuals](#actuals). Edit Hex only for Experimentation Velocity fallback or SOTA grade. |
 | **Quarterly** | Week 1 of new quarter (~half day) | **Metric owners** ([Step 0](#step-0--confirm-the-new-quarters-goals-with-each-owner)) · **You** (roll) | Owners confirm goals are final → run quarter-roll cell chains → publish Hex → Change Log. |
 
 **1. At the quarter roll, confirm goals with their owners before you touch Hex.**
