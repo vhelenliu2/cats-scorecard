@@ -111,7 +111,7 @@ IMPRESSIONS_GOALS = {'Q3 2026': {'US': 59_800_000_000, 'ROW': 57_900_000_000}}
 | Ads Realized Revenue, MAA, DAUq, Thriving, Ad Impressions, eCPM | Warehouse                                                                                                                                  | Daily          | Nothing     |
 
 
-The one thing that silently breaks the A/B rows is a **renamed label** in the tracker, which blanks the goal without any warning. See [Post-Install CPA A/B vs plain CPA](#post-install-cpa-ab-vs-plain-cpa).
+The one thing that silently breaks the A/B rows is a **renamed label** in the tracker, which blanks the goal without any warning. 
 
 **Then run:** `Company Level Goals df` → `Company Level Goals Table`.
 
