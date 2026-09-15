@@ -1,4 +1,4 @@
-# Operations runbook — quarter roll and monthly upkeep
+# Operations runbook — quarter roll and monthly & weekly upkeep
 
 **As of:** 14 September 2026
 
@@ -17,7 +17,7 @@ Your work is only two things the schedule cannot do: confirm upstream sheets wer
 
 ---
 
-## Two rules before you start
+## Before you start
 
 | Cadence | When | Who | What |
 |---|---|---|---|
