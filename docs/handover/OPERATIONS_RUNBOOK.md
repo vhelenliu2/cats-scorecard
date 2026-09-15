@@ -36,7 +36,7 @@ The 9:00 run re-reads every connected sheet. When a sheet-backed row looks wrong
 
 **Auto on the 9:00 run (confirm upstream, do not re-type):** A/B goals, Shopping CQ/FY and weekly paced QTD, Measured Revenue steps, Upper Funnel (brand feed), Rev/FTE waypoints, Scale actuals and linear goal pacing, MAA/DAUq, FTE headcount.
 
-**Still manual in Hex:** Ad Impressions `IMPRESSIONS_GOALS`, HQ Signal (no source), Experimentation `_EXP_COUNTS` when SQL is down, SOTA `_SOTA_BY_Q` when the pillar grade changes.
+**Goals that are still manual in Hex:** Ad Impressions `IMPRESSIONS_GOALS`, HQ Signal (no source). Scale FY/CQ targets auto-pull from Roadmap KPIs — confirm with Virgilio only. Among Scale **actuals**, Experimentation `_EXP_COUNTS` when SQL is down is the only notebook edit.
 
 Run cells by hand only to verify a change today instead of waiting for tomorrow's 9:00 run.
 
@@ -136,7 +136,7 @@ That chain reads Roadmap KPIs (Shopping + Measured + A/B), the shopping pacing s
 | Upper Funnel Revenue         | Brand pillar feed (`upper_funnel_revenue_df`)                                                                                                                                                                       | Confirm CQ/FY with Emily at roll                                                                  |
 | Revenue / S+M FTE            | [Rev / S+M FTE gsheet](https://docs.google.com/spreadsheets/d/1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk/edit?gid=971510625) → `rev_fte_actuals`                                                                  | Confirm waypoints at roll; monthly = confirm new FTE month only                                   |
 | High Quality Signal Adoption | **Manual** — no published source                                                                                                                                                                                    | Ask Aayush Shah or Emre Enes Yavuz for reference targets; status stays grey                       |
-| Scale (five rows)            | `Scale foundations actuals` — linear pacing from roadmap rates + sheet/SQL actuals; SOTA from pillar doc                                                                                                          | See [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis); edit constants only when rates or fallbacks change |
+| Scale (five rows)            | [Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236) → `cats_kpi_sheet_goals` → `Scale foundations actuals` (linear pacing); SOTA actual from pillar doc | See [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis) — verify sheet targets match pacing methodology; no notebook edit when Virgilio updates a rate |
 
 
 **Other actuals on this tab** (warehouse or sheet — no typing):
@@ -160,22 +160,28 @@ That chain reads Roadmap KPIs (Shopping + Measured + A/B), the shopping pacing s
 
 Virgilio asked for **linear pacing across the year** — QTD goal bars scale with elapsed calendar time, not a flat quarter target.
 
-**Notebook path:** tracking source → `Scale * gsheet` / SQL → `Scale * df` → **`Scale foundations actuals`** (sets `scale_*_actuals` variables) → **`CATS SC KPIs Metrics`** → **`CATS SC KPIs Table`**. The 9:00 run walks this chain; run those three cells by hand only after you change a notebook constant.
+**Goals auto-pull** from [Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) on the 9:00 run — no notebook edit when Virgilio updates a target. Your job is to **confirm with Virgilio that the sheet targets are final** and that pacing colours look right after the next run.
+
+**Goals chain:** `C performance goals ab gsheet` → `C performance goals ab df` → `C performance goals ad df with cpv` → `cats_kpi_sheet_goals` → `Scale foundations actuals` → `CATS SC KPIs Metrics` → `CATS SC KPIs Table`
+
+**Actuals chain:** tracking source → `Scale * gsheet` / SQL → `Scale * df` → `Scale foundations actuals` → `CATS SC KPIs Metrics` → `CATS SC KPIs Table`
 
 **Trap:** Failed sheet pulls fall back to checksums and still look healthy. If Value and “as of {month}” do not move month over month, check the source with Nikhil — do not type a cover number.
 
 #### Goals
 
-All goal math lives in **`Scale foundations actuals`**. Constants below are current values; QTD goals recompute each run from elapsed months.
+**All five goals** auto-pull from the [CATS Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) on the 9:00 run — no notebook edit when Virgilio updates a target. QTD goal bars apply **linear pacing** (below) on top of the sheet targets. Confirm with Virgilio that targets are **final** and that status colours look right after the next run.
+
+All rows use `goal_binary`: **Green** = at or above 100% of the paced bar · **Yellow** = never · **Red** = below 100%.
 
 
-| Metric                   | Current CQ / FY target   | QTD goal (linear pacing)                                                            | Status                                                   | Notebook constants                                             | Edit/Verify when                       |
-| ------------------------ | ------------------------ | ----------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------- |
-| Operational Excellence   | CQ **+5%** · FY **+40%** | **+5% × (completed months in Q ÷ 3)** — e.g. +3.3% after 2 months in Q3             | Green if **QoQ ≥ QTD goal** (pacing uses QoQ, not Value) | `_OE_CQ_GOAL = 0.05` · `_OE_FY_GOAL = 0.40`                    | Verify when Virgilio changes rates or edit when automatic pull fails          |
-| Cloud Savings            | FY **$10M**              | **FY × (completed months ÷ 12)**; FY from tracker **E1**, else `_CLOUD_FY_FALLBACK` | Value vs QTD $ bar                                       | `_CLOUD_FY_FALLBACK = 10M` · `_CLOUD_Q1` / `_CLOUD_Q2` for QoQ | Edit when FY or quarter anchors change    |
-| Model Velocity           | FY **+25% YoY**          | **Last-year same-elapsed count × 1.25** (from sheet history when readable)          | QTD count vs QTD goal                                    | `_ML_YOY_GOAL = 0.25`                                          | Verify when Rate change or edit when automatic pull fails                    |
-| Experimentation Velocity | FY **+33% YoY**          | **LY same-elapsed × 1.33**; CQ = LY full quarter × 1.33                             | QTD count vs QTD goal                                    | `_EXP_YOY_GOAL = 0.33`                                         | Verify when Rate change or edit when automatic pull fails                    |
-| Ads SOTA ML              | FY **B**                 | Expected grade on line **C− (Jan) → B (Dec)**: rank 1.7 + 1.3 × (months ÷ 12)       | Green if current grade ≥ paced grade                     | `_SOTA_START = 'C-'` · `_SOTA_FY = 'B'` · `_SOTA_BY_Q`         | Verify when Rate change or edit when automatic pull fails |
+| Metric | Source | KPI row | Current CQ / FY target | QTD pacing rule | Status (Green / Yellow / Red) | Confirm with owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| Operational Excellence | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | M10n / Operational Excellence | CQ rate from **current quarter column**; FY rate from **FY Goal column** | **CQ rate × (completed months in quarter ÷ 3)**; status compares **QoQ** to that rate (not Value) | **Green:** QoQ ≥ QTD rate · **Yellow:** — · **Red:** QoQ < QTD rate | Virgilio: are CQ / FY targets final? Do status colours match intent? |
+| Cloud Savings | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Cloud Savings | FY $ from **FY Goal column** (CQ often blank) | **FY target × (completed months ÷ 12)** | **Green:** YTD $ ≥ QTD bar · **Yellow:** — · **Red:** YTD $ < QTD bar | Virgilio: is FY $ target final? Do status colours match intent? |
+| Model Velocity | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Model Velocity | FY YoY % from **FY Goal column** | **Last-year same-elapsed launch count × (1 + FY rate)** | **Green:** QTD count ≥ QTD goal · **Yellow:** — · **Red:** QTD count < QTD goal | Virgilio: is FY YoY rate final? Do status colours match intent? |
+| Experimentation Velocity | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Experimentation Velocity | FY YoY % from **FY Goal column** | **LY same-elapsed count × (1 + FY rate)**; CQ bar = LY full quarter × rate | **Green:** QTD count ≥ QTD goal · **Yellow:** — · **Red:** QTD count < QTD goal | Virgilio: is FY YoY rate final? Do status colours match intent? |
+| Ads SOTA ML | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Ads SOTA ML | FY letter grade from **FY Goal column** | **Linear path calendar year:** expected rank = 1.7 + 1.3 × (months elapsed ÷ 12), mapped to letter grade | **Green:** current grade ≥ paced grade · **Yellow:** — · **Red:** current grade < paced grade | Virgilio: is FY grade final? Do status colours match intent? (Actual grade auto-scans [pillar doc](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) — confirm readout is posted.) |
 
 
 #### Actuals
@@ -189,7 +195,7 @@ Output dicts from **`Scale foundations actuals`** that **`CATS SC KPIs Metrics`*
 | Cloud Savings | [Efficiencies tracker](https://docs.google.com/spreadsheets/d/1FHwfDergUSuQUV68f6j445i2_TQhBvpHeRlmie9SNEY/edit?gid=915660352) C1/E1 | `Scale cloud gsheet` → `Scale cloud df` → **`scale_cloud_actuals`** | **Auto.** YTD from C1 (checksum if unreadable). QoQ = (YTD − Q1 − Q2) ÷ Q2 − 1; MoM / YoY blank | Confirm C1 moved |
 | Model Velocity | [Ranking ML KPIs](https://docs.google.com/spreadsheets/d/1s-Q0o19dG2b5sn25kHSXlWyqJ48vt9U39Vmi6DZU6r4/edit?gid=477633216) | `Scale ML gsheet` → four df cells → **`scale_ml_actuals`** | **Auto.** QTD launches with non-zero KPI movement (excl. backtest / bug / deprec / 0 / undated) | Confirm new launches on 2026 tabs |
 | Experimentation Velocity | [Insights](https://app.hex.tech/reddit/app/Ads-Experimentation-Insights-031Wg80FsfMFpb7daAPehQ/latest) QTD card | `Scale exp treatment starts df` → **`scale_exp_actuals`**; else **`_EXP_COUNTS`** | **Auto if SQL runs.** QTD distinct experiments (Ads Exp, `unique_objects > 1000`). Read **QTD not YTD** | If SQL down: update `_EXP_COUNTS[(year, quarter)]` from QTD card after month close |
-| Ads SOTA ML | [Pillar doc readout](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) | **`scale_sota_actuals`** (`_SOTA_BY_Q`) | Scan latest pillar update for quarter grade — **B−** today. MoM / QoQ / YoY blank | Scan doc; if grade changed, update `_SOTA_BY_Q` |
+| Ads SOTA ML | [Pillar doc — Subjective readout](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) | `Scale foundations actuals` → `scale_sota_actuals` (auto-scan) | Hex picks **most recent dated grade** in Subjective readout. MoM / QoQ / YoY blank | Confirm new readout posted — no Hex edit |
 
 
 **After any notebook edit:** `Scale foundations actuals` → `CATS SC KPIs Metrics` → `CATS SC KPIs Table`. Verification only → wait for 9:00 run.
@@ -230,7 +236,7 @@ Publish once the draft looks right, then record notebook constant edits in the *
 
 Run this after the S-pillar team closes the month, usually in the first week (~20 minutes). The 9:00 run re-reads connected sheets automatically — your job is to **verify sources updated**, not re-type numbers.
 
-**Scale Our Foundations:** Follow the **Actuals** table in [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis) (Step 2). Use the **Monthly action** column for each row. Only Experimentation (when SQL is down) and SOTA (when the pillar doc grade changes) need notebook edits.
+**Scale Our Foundations:** Follow the **Goals** and **Actuals** tables in [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis) (Step 2). Goals auto-pull from Roadmap KPIs — verify only. Only Experimentation (when SQL is down) needs a notebook edit among Scale actuals.
 
 ## Revenue / Sales + Marketing FTE
 
@@ -362,7 +368,7 @@ Two things it does not cover: Hex project access and publishing sit with the cur
 - [ ] Every owner has confirmed the goals are **final** for the new quarter — a populated sheet is not a confirmation. Includes HQ Signal, which has no sheet at all.
 - [ ] Company Level: MAA, DAUq and A/B sheets confirmed rolled; `IMPRESSIONS_GOALS` updated from Daily Forecast – Live
 - [ ] KPIs: Roadmap KPIs + pacing sheet + Rev/FTE sheet confirmed; goals chain run → KPI Table verified
-- [ ] Scale: `_SOTA_BY_Q` has a key for the new quarter; `_EXP_COUNTS` / fallbacks updated if SQL was down at roll
+- [ ] Scale: Virgilio confirmed current quarter + **FY Goal** columns on [Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236); status colours look right; `_EXP_COUNTS` updated if SQL was down at roll
 - [ ] GTM: Metrics → Table re-run (actuals-only rows; no goal sync needed)
 - [ ] Supply: table re-run
 - [ ] Draft reviewed, then published
