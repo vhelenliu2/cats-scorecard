@@ -36,7 +36,7 @@ The 9:00 run re-reads every connected sheet. When a sheet-backed row looks wrong
 
 **Auto on the 9:00 run (confirm upstream, do not re-type):** A/B goals, Shopping CQ/FY and weekly paced QTD, Measured Revenue steps, Upper Funnel (brand feed), Rev/FTE waypoints, Scale actuals and linear goal pacing, MAA/DAUq, FTE headcount.
 
-**Still manual in Hex:** Ad Impressions `IMPRESSIONS_GOALS`, HQ Signal (no source), Experimentation `_EXP_COUNTS` when SQL is down, SOTA `_SOTA_BY_Q` when the pillar grade changes, occasional Scale goal-rate or fallback constants.
+**Still manual in Hex:** Ad Impressions `IMPRESSIONS_GOALS`, HQ Signal (no source), Experimentation `_EXP_COUNTS` when SQL is down, SOTA `_SOTA_BY_Q` when the pillar grade changes.
 
 Run cells by hand only to verify a change today instead of waiting for tomorrow's 9:00 run.
 
