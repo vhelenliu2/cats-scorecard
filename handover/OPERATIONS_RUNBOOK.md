@@ -172,16 +172,18 @@ Virgilio asked for **linear pacing across the year** — QTD goal bars scale wit
 
 #### Goals
 
-CQ/FY targets are read from the **KPIs** tab each run. QTD goal bars apply **linear pacing** (below) on top of those targets. All five rows use the `goal_binary` status rule: **Green** ≥ 100% of the paced bar, **Yellow** never (—), **Red** below 100%.
+**All five goals** auto-pull from the [CATS Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) on the 9:00 run — no notebook edit when Virgilio updates a target. QTD goal bars apply **linear pacing** (below) on top of the sheet targets. Confirm with Virgilio that targets are **final** and that status colours look right after the next run.
+
+All rows use `goal_binary`: **Green** = at or above 100% of the paced bar · **Yellow** = never · **Red** = below 100%.
 
 
-| Metric | Source | Current CQ / FY target | QTD pacing rule | Status (Green / Yellow / Red) | Confirm with owner |
-| --- | --- | --- | --- | --- | --- |
-| Operational Excellence | [CATS Roadmap KPIs — M10n / Operational Excellence row](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | CQ rate + FY rate from current quarter column and **2026 Goal** | **CQ rate × (completed months in quarter ÷ 3)**; colour compares **QoQ** to that rate (not Value) | **Green** QoQ ≥ QTD rate · **Yellow** — · **Red** QoQ < QTD rate | Virgilio: are CQ / FY targets final for this quarter? |
-| Cloud Savings | [CATS Roadmap KPIs — Cloud Savings row](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | FY $ target from **2026 Goal** (CQ often blank) | **FY target × (completed months ÷ 12)** | **Green** YTD $ ≥ QTD bar · **Yellow** — · **Red** YTD $ < QTD bar | Virgilio: is FY $ target final? |
-| Model Velocity | [CATS Roadmap KPIs — Model Velocity row](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | FY YoY % from **2026 Goal** | **Last-year same-elapsed launch count × (1 + FY rate)** | **Green** QTD count ≥ QTD goal · **Yellow** — · **Red** QTD count < QTD goal | Virgilio: is FY YoY rate final? |
-| Experimentation Velocity | [CATS Roadmap KPIs — Experimentation Velocity row](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | FY YoY % from **2026 Goal** | **LY same-elapsed count × (1 + FY rate)**; CQ bar = LY full quarter × rate | **Green** QTD count ≥ QTD goal · **Yellow** — · **Red** QTD count < QTD goal | Virgilio: is FY YoY rate final? |
-| Ads SOTA ML | [CATS Roadmap KPIs — Ads SOTA ML row](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) (FY grade); actual grade from [pillar doc Subjective readout](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) | FY letter grade from **2026 Goal** | **Linear path Jan → Dec**: expected rank = 1.7 + 1.3 × (months ÷ 12), mapped to letter grade | **Green** current grade ≥ paced grade · **Yellow** — · **Red** current grade < paced grade | Virgilio: is FY grade final? Confirm subjective readout is posted |
+| Metric | Source | KPI row | Current CQ / FY target | QTD pacing rule | Status (Green / Yellow / Red) | Confirm with owner |
+| --- | --- | --- | --- | --- | --- | --- |
+| Operational Excellence | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | M10n / Operational Excellence | CQ rate from **current quarter column**; FY rate from **FY Goal column** | **CQ rate × (completed months in quarter ÷ 3)**; status compares **QoQ** to that rate (not Value) | **Green:** QoQ ≥ QTD rate · **Yellow:** — · **Red:** QoQ < QTD rate | Virgilio: are CQ / FY targets final? Do status colours match intent? |
+| Cloud Savings | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Cloud Savings | FY $ from **FY Goal column** (CQ often blank) | **FY target × (completed months ÷ 12)** | **Green:** YTD $ ≥ QTD bar · **Yellow:** — · **Red:** YTD $ < QTD bar | Virgilio: is FY $ target final? Do status colours match intent? |
+| Model Velocity | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Model Velocity | FY YoY % from **FY Goal column** | **Last-year same-elapsed launch count × (1 + FY rate)** | **Green:** QTD count ≥ QTD goal · **Yellow:** — · **Red:** QTD count < QTD goal | Virgilio: is FY YoY rate final? Do status colours match intent? |
+| Experimentation Velocity | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Experimentation Velocity | FY YoY % from **FY Goal column** | **LY same-elapsed count × (1 + FY rate)**; CQ bar = LY full quarter × rate | **Green:** QTD count ≥ QTD goal · **Yellow:** — · **Red:** QTD count < QTD goal | Virgilio: is FY YoY rate final? Do status colours match intent? |
+| Ads SOTA ML | [CATS Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) | Ads SOTA ML | FY letter grade from **FY Goal column** | **Linear path calendar year:** expected rank = 1.7 + 1.3 × (months elapsed ÷ 12), mapped to letter grade | **Green:** current grade ≥ paced grade · **Yellow:** — · **Red:** current grade < paced grade | Virgilio: is FY grade final? Do status colours match intent? (Actual grade auto-scans [pillar doc](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) — confirm readout is posted.) |
 
 
 #### Actuals
@@ -368,7 +370,7 @@ Two things it does not cover: Hex project access and publishing sit with the cur
 - [ ] Every owner has confirmed the goals are **final** for the new quarter — a populated sheet is not a confirmation. Includes HQ Signal, which has no sheet at all.
 - [ ] Company Level: MAA, DAUq and A/B sheets confirmed rolled; `IMPRESSIONS_GOALS` updated from Daily Forecast – Live
 - [ ] KPIs: Roadmap KPIs + pacing sheet + Rev/FTE sheet confirmed; goals chain run → KPI Table verified
-- [ ] Scale: Virgilio confirmed current quarter + **2026 Goal** columns on [Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236); `_EXP_COUNTS` updated if SQL was down at roll
+- [ ] Scale: Virgilio confirmed current quarter + **FY Goal** columns on [Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236); status colours look right; `_EXP_COUNTS` updated if SQL was down at roll
 - [ ] GTM: Metrics → Table re-run (actuals-only rows; no goal sync needed)
 - [ ] Supply: table re-run
 - [ ] Draft reviewed, then published
