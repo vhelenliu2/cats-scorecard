@@ -118,9 +118,9 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 
 ### Goals that auto-pull from sheets (9:00 run)
 
-- **Shopping Revenue** — CQ/FY from Roadmap `KPIs` tab; paced QTD from the shopping pacing sheet (column AO, current week)
+- **Shopping Revenue** — CQ/FY from Roadmap `KPIs` tab; paced QTD from the pacing sheet (col **B** = week, col **AO** = target for that week)
 - **Overall Measured Revenue** — quarterly steps + FY from Roadmap `KPIs` tab
-- **Upper Funnel Revenue** — brand pillar feed (`upper_funnel_revenue_df`)
+- **Upper Funnel Revenue** — CQ/FY from [brand goals doc](https://docs.google.com/document/d/1wujsIOOkqapGknYdUNIjxekxpd90qsRM4ByoADJtvR8/edit?tab=t.0#bookmark=id.sw1mjrnh4i0a) (Progress to Revenue Goal 2026 table); actuals from warehouse (`upper_funnel_revenue_df`)
 - **Rev/FTE** — LTM waypoints from the Rev/FTE planning sheet
 - **A/B lifts** — Roadmap `KPIs` tab (same chain as Company Level)
 - **Scale** — linear pacing in `Scale foundations actuals` from roadmap rates + sheet/SQL actuals
@@ -130,7 +130,7 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 - Ad Impressions (`IMPRESSIONS_GOALS`)
 - HQ Signal *(reference only; no source)*
 - Experimentation `_EXP_COUNTS` when SQL is down
-- SOTA `_SOTA_BY_Q` when the pillar doc grade changes
+- SOTA grade auto-scans from pillar doc Subjective readout (no Hex edit when grade changes)
 - Occasional Scale goal-rate or fallback constants
 
 ### After the morning run — check these
@@ -347,7 +347,7 @@ Any row can fall back to grey regardless of its strategy: a stale source, a paci
 |---|---|
 | **Scale** | Monthly sheets. Each row has its own shape (a level, a year-to-date, a count, or a grade). OE “QoQ” = this month-end vs the last month of last quarter. See [Scale](#scale) |
 | **Rev/FTE** | Monthly last-twelve-months level. MoM / QoQ / YoY = that level vs **1 / 3 / 12 months** earlier. See [Rev/FTE](#revfte) |
-| **Shopping Revenue** | The dollar **actual** does add up the quarter (R28 MoM, same-elapsed QoQ). **YoY** is year-to-date vs the same calendar day last year. The in-quarter **paced goal** comes from the pacing sheet (column AO) — not CQ × days elapsed. This is **not** the Shopping ROAS A/B row. |
+| **Shopping Revenue** | The dollar **actual** does add up the quarter (R28 MoM, same-elapsed QoQ). **YoY** is year-to-date vs the same calendar day last year. The in-quarter **paced goal** comes from the pacing sheet: Hex picks the **latest row where col B ≤ `latest_date`**, reads col **AO** — not CQ × days elapsed. This is **not** the Shopping ROAS A/B row. |
 | **A/B lifts** | Value is this **month’s** lift from the tracker (one number per calendar month — we do not sum or average the quarter). MoM / QoQ / YoY stay **blank**. The **goal** is still the quarter target; color compares this month’s lift to that full-quarter goal (green if already hit; last month 95 / 70; otherwise grey). **Shopping ROAS A/B** uses the same color rule, but its sheet is one row per quarter. See [A/B](#ab-lifts) |
 | **Reach / Frequency / Depth** | Snapshot on as-of. **MoM blank.** QoQ / YoY = same day-of-quarter in the prior quarter / prior year |
 | **Retention** | Share still active after a 28- or 91-day wait. Comps are **percentage points** vs 1 / 3 / 12 months earlier (on the baked as-of) |

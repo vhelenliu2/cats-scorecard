@@ -19,12 +19,14 @@ Your work is only two things the schedule cannot do: confirm upstream sheets wer
 
 ## Two rules before you start
 
-| Cadence | When | Who | What |
-|---|---|---|---|
-| **Daily** | 9:00 AM Chicago auto-run | — | Nothing — warehouse + sheets refresh. Investigate only if a row looks wrong. |
-| **Weekly** | After Vinay's team updates pacing | **Vinay Sridhar** (sheet) · **You** (verify) | Confirm [pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) col **AO** has the current week — no Hex edit. |
-| **Monthly** | First week after month close (~20 min) | **Nikhil Khanted** (Scale actuals) · **Nick Asaad** (FTE sheet) · **You** (verify) | Confirm Scale sources + FTE month landed. See [Part 2](#part-2--monthly-upkeep) and [Scale Actuals](#actuals). Edit Hex only for Exp fallback or SOTA grade. |
-| **Quarterly** | Week 1 of new quarter (~half day) | **Metric owners** ([Step 0](#step-0--confirm-the-new-quarters-goals-with-each-owner)) · **You** (roll) | Owners confirm goals are final → run quarter-roll cell chains → publish Hex → Change Log. |
+
+| Cadence       | When                                   | Who                                                                                                    | What                                                                                                                                                                                             |
+| ------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Daily**     | 9:00 AM Chicago auto-run               | —                                                                                                      | Nothing — warehouse + sheets refresh. Investigate only if a row looks wrong.                                                                                                                     |
+| **Weekly**    | After Vinay's team updates pacing      | **Vinay Sridhar** (sheet) · **You** (verify)                                                           | Confirm [pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) col **B** (week) + **AO** (target) — no Hex edit. |
+| **Monthly**   | First week after month close (~20 min) | **Nikhil Khanted** (Scale actuals) · **Nick Asaad** (FTE sheet) · **You** (verify)                     | Confirm Scale sources + FTE month landed. See [Part 2](#part-2--monthly-upkeep) and [Scale Actuals](#actuals) — no Hex edit..                                                                    |
+| **Quarterly** | Week 1 of new quarter (~half day)      | **Metric owners** ([Step 0](#step-0--confirm-the-new-quarters-goals-with-each-owner)) · **You** (roll) | Owners confirm goals are final → run quarter-roll cell chains → publish Hex → Change Log.                                                                                                        |
+
 
 **1. At the quarter roll, confirm goals with their owners before you touch Hex.**
 
@@ -36,7 +38,7 @@ The 9:00 run re-reads every connected sheet. When a sheet-backed row looks wrong
 
 **Auto on the 9:00 run (confirm upstream, do not re-type):** A/B goals, Shopping CQ/FY and weekly paced QTD, Measured Revenue steps, Upper Funnel (brand feed), Rev/FTE waypoints, Scale actuals and linear goal pacing, MAA/DAUq, FTE headcount.
 
-**Still manual in Hex:** Ad Impressions `IMPRESSIONS_GOALS`, HQ Signal (no source), Experimentation `_EXP_COUNTS` when SQL is down, SOTA `_SOTA_BY_Q` when the pillar grade changes, occasional Scale goal-rate or fallback constants.
+**Goals that are still manual in Hex:** Ad Impressions `IMPRESSIONS_GOALS`, HQ Signal (no source), Experimentation `_EXP_COUNTS` when SQL is down, SOTA linear path anchors (`_SOTA_START` / `_SOTA_FY`) if Virgilio changes the year-end target.
 
 Run cells by hand only to verify a change today instead of waiting for tomorrow's 9:00 run.
 
@@ -125,18 +127,18 @@ Most KPI goals auto-pull on the 9:00 run. Confirm upstream sources in Step 0, th
 
 `C performance goals ab gsheet` → `C performance goals ab df` → `C performance goals ad df with cpv` → `Rev FTE gsheet` → `Rev FTE df` → `Rev FTE actuals` → `CATS SC KPIs Metrics` → `CATS SC KPIs Table`
 
-That chain reads Roadmap KPIs (Shopping + Measured + A/B), the shopping pacing sheet (column AO), the brand feed (Upper Funnel), and Rev/FTE waypoints.
+That chain reads Roadmap KPIs (Shopping + Measured + A/B), the shopping pacing sheet (col B week → col AO target), the brand feed (Upper Funnel), and Rev/FTE waypoints.
 
 
-| Goal                         | Auto-pull source                                                                                                                                                                                                    | Your job                                                                                          |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Shopping Revenue — CQ and FY | [CATS Roadmap Planning](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236) `KPIs` tab → `cats_kpi_sheet_goals`                                              | Confirm the new quarter's column; run the chain above at roll                                     |
-| Shopping Revenue — paced QTD | [Shopping pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) col **AO**, current week → same dict                             | Confirm Vinay's team updated the current quarter tab each week — Hex reads it on the 9:00 run     |
-| Overall Measured Revenue     | Roadmap `KPIs` tab → `cats_kpi_sheet_goals`                                                                                                                                                                         | Confirm quarterly steps at roll                                                                   |
-| Upper Funnel Revenue         | Brand pillar feed (`upper_funnel_revenue_df`)                                                                                                                                                                       | Confirm CQ/FY with Emily at roll                                                                  |
-| Revenue / S+M FTE            | [Rev / S+M FTE gsheet](https://docs.google.com/spreadsheets/d/1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk/edit?gid=971510625) → `rev_fte_actuals`                                                                  | Confirm waypoints at roll; monthly = confirm new FTE month only                                   |
-| High Quality Signal Adoption | **Manual** — no published source                                                                                                                                                                                    | Ask Aayush Shah or Emre Enes Yavuz for reference targets; status stays grey                       |
-| Scale (five rows)            | `Scale foundations actuals` — linear pacing from roadmap rates + sheet/SQL actuals; SOTA from pillar doc                                                                                                          | See [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis); edit constants only when rates or fallbacks change |
+| Goal                         | Auto-pull source                                                                                                                                                                                       | Your job                                                                                                                     |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| Shopping Revenue — CQ and FY | [CATS Roadmap Planning](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236) `KPIs` tab → `cats_kpi_sheet_goals`                                    | Confirm the new quarter's column; run the chain above at roll                                                                |
+| Shopping Revenue — paced QTD | [Shopping pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) col **B** (week) → col **AO** → `cats_kpi_sheet_goals` | Confirm Vinay's team updated the current quarter tab each week — Hex picks latest row of column AO where col B ≤ latest_date |
+| Overall Measured Revenue     | Roadmap `KPIs` tab → `cats_kpi_sheet_goals`                                                                                                                                                            | Confirm quarterly steps at roll                                                                                              |
+| Upper Funnel Revenue         | [Brand pillar feed](https://docs.google.com/document/d/1wujsIOOkqapGknYdUNIjxekxpd90qsRM4ByoADJtvR8/edit?tab=t.0#bookmark=id.sw1mjrnh4i0a) (`upper_funnel_revenue_df`)                                 | Confirm CQ/FY with Emily at roll                                                                                             |
+| Revenue / S+M FTE            | [Rev / S+M FTE gsheet](https://docs.google.com/spreadsheets/d/1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk/edit?gid=971510625) → `rev_fte_actuals`                                                     | Confirm waypoints at roll; monthly = confirm new FTE month only                                                              |
+| High Quality Signal Adoption | **Manual** — no published source                                                                                                                                                                       | Ask Aayush Shah or Emre Enes Yavuz for reference targets; status stays grey until further                                    |
+| Scale (five rows)            | `Scale foundations actuals` — linear pacing from roadmap rates + sheet/SQL actuals; SOTA from pillar doc                                                                                               | See [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis); edit constants only when rates or fallbacks change        |
 
 
 **Other actuals on this tab** (warehouse or sheet — no typing):
@@ -160,36 +162,40 @@ That chain reads Roadmap KPIs (Shopping + Measured + A/B), the shopping pacing s
 
 Virgilio asked for **linear pacing across the year** — QTD goal bars scale with elapsed calendar time, not a flat quarter target.
 
-**Notebook path:** tracking source → `Scale * gsheet` / SQL → `Scale * df` → **`Scale foundations actuals`** (sets `scale_*_actuals` variables) → **`CATS SC KPIs Metrics`** → **`CATS SC KPIs Table`**. The 9:00 run walks this chain; run those three cells by hand only after you change a notebook constant.
+**Goals auto-pull** from [Roadmap KPIs tab](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) on the 9:00 run — you verify the sheet matches the pacing methodology below; no notebook edit when Virgilio updates a target.
+
+**Goals chain:** `C performance goals ab gsheet` → `C performance goals ab df` → `C performance goals ad df with cpv` → `cats_kpi_sheet_goals` → `Scale foundations actuals` → `CATS SC KPIs Metrics` → `CATS SC KPIs Table`
+
+**Actuals chain:** tracking source → `Scale * gsheet` / SQL → `Scale * df` → `Scale foundations actuals` → `CATS SC KPIs Metrics` → `CATS SC KPIs Table`
 
 **Trap:** Failed sheet pulls fall back to checksums and still look healthy. If Value and “as of {month}” do not move month over month, check the source with Nikhil — do not type a cover number.
 
 #### Goals
 
-All goal math lives in **`Scale foundations actuals`**. Constants below are current values; QTD goals recompute each run from elapsed months.
+CQ/FY targets are read from the **KPIs** tab each run. QTD goal bars apply **linear pacing** (below) on top of those targets.
 
 
-| Metric                   | Current CQ / FY target   | QTD goal (linear pacing)                                                            | Status                                                   | Notebook constants                                             | Edit when                       |
-| ------------------------ | ------------------------ | ----------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------- |
-| Operational Excellence   | CQ **+5%** · FY **+40%** | **+5% × (completed months in Q ÷ 3)** — e.g. +3.3% after 2 months in Q3             | Green if **QoQ ≥ QTD goal** (pacing uses QoQ, not Value) | `_OE_CQ_GOAL = 0.05` · `_OE_FY_GOAL = 0.40`                    | Virgilio changes rates          |
-| Cloud Savings            | FY **$10M**              | **FY × (completed months ÷ 12)**; FY from tracker **E1**, else `_CLOUD_FY_FALLBACK` | Value vs QTD $ bar                                       | `_CLOUD_FY_FALLBACK = 10M` · `_CLOUD_Q1` / `_CLOUD_Q2` for QoQ | FY or quarter anchors change    |
-| Model Velocity           | FY **+25% YoY**          | **Last-year same-elapsed count × 1.25** (from sheet history when readable)          | QTD count vs QTD goal                                    | `_ML_YOY_GOAL = 0.25`                                          | Rate change                     |
-| Experimentation Velocity | FY **+33% YoY**          | **LY same-elapsed × 1.33**; CQ = LY full quarter × 1.33                             | QTD count vs QTD goal                                    | `_EXP_YOY_GOAL = 0.33`                                         | Rate change                     |
-| Ads SOTA ML              | FY **B**                 | Expected grade on line **C− (Jan) → B (Dec)**: rank 1.7 + 1.3 × (months ÷ 12)       | Green if current grade ≥ paced grade                     | `_SOTA_START = 'C-'` · `_SOTA_FY = 'B'` · `_SOTA_BY_Q`         | Doc publishes new quarter grade |
+| Metric | Goal source | Notebook path | Current CQ / FY (verify on sheet) | QTD pacing methodology | Status | Your job |
+| --- | --- | --- | --- | --- | --- | --- |
+| Operational Excellence | [Roadmap KPIs](https://docs.google.com/spreadsheets/d/1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw/edit?gid=114524236#gid=114524236) — M10n / Operational Excellence row | `C performance goals ad df with cpv` → `cats_kpi_sheet_goals['oe_cq'/'oe_fy']` → `scale_oe_actuals` | Q3 **+5%** · FY **+40%** | **CQ rate × (completed months in Q ÷ 3)** — e.g. +3.3% after 2 months in Q3 | Green if **QoQ ≥ QTD goal** (pacing uses QoQ, not Value) | Confirm Q3 / 2026 Goal columns match Virgilio’s intent |
+| Cloud Savings | Same KPIs tab — Cloud Savings row | → `cats_kpi_sheet_goals['cloud_fy']` → `scale_cloud_actuals` | FY **$10M** (CQ often blank) | **FY × (completed months ÷ 12)**; actual FY also cross-checks tracker **E1** | Value vs QTD $ bar | Confirm **2026 Goal** = $10M; tracker E1 aligned |
+| Model Velocity | Same KPIs tab — Model Velocity row | → `cats_kpi_sheet_goals['ml_yoy']` → `scale_ml_actuals` | FY **+25% YoY** | **Last-year same-elapsed launch count × (1 + FY rate)** | QTD count vs QTD goal | Confirm **2026 Goal** = +25% YoY |
+| Experimentation Velocity | Same KPIs tab — Experimentation Velocity row | → `cats_kpi_sheet_goals['exp_yoy']` → `scale_exp_actuals` | FY **+33% YoY** | **LY same-elapsed × (1 + FY rate)**; CQ = LY full quarter × rate | QTD count vs QTD goal | Confirm **2026 Goal** = +33% YoY |
+| Ads SOTA ML | KPIs tab (FY **B**) + linear path in `Scale foundations actuals`; **actual grade** from [pillar doc Subjective readout](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) | → `scale_sota_actuals` | FY **B**; actual **B−** today | Expected grade on line **C− (Jan) → B (Dec)**: rank 1.7 + 1.3 × (months ÷ 12) | Green if current grade ≥ paced grade | Confirm subjective readout posted; edit `_SOTA_START`/`_SOTA_FY` only if year path changes |
 
 
 #### Actuals
 
-Output dicts from **`Scale foundations actuals`** that **`CATS SC KPIs Metrics`** reads (`scale_oe_actuals`, etc.).
+Output dicts from `Scale foundations actuals` that `CATS SC KPIs Metrics` reads (`scale_oe_actuals`, etc.).
 
 
-| Metric | Tracking source | Notebook path → variable | Value & comps | Monthly action |
-|---|---|---|---|---|
-| Operational Excellence | [Manager Dashboard](https://docs.google.com/spreadsheets/d/1hox9yMMDwBwnJOGt9GiweFafCH7wWGGwsKlUfGWJ_sU/edit?gid=876519945) | `Scale OE gsheet` → `Scale OE df` → **`scale_oe_actuals`** | **Auto.** Sum of team scores at latest completed month-end (skip summary rows). MoM / QoQ / YoY = same-team % change vs prior month, prior-Q-end, or Dec 2025 | Confirm new month column (~1 mo lag OK) |
-| Cloud Savings | [Efficiencies tracker](https://docs.google.com/spreadsheets/d/1FHwfDergUSuQUV68f6j445i2_TQhBvpHeRlmie9SNEY/edit?gid=915660352) C1/E1 | `Scale cloud gsheet` → `Scale cloud df` → **`scale_cloud_actuals`** | **Auto.** YTD from C1 (checksum if unreadable). QoQ = (YTD − Q1 − Q2) ÷ Q2 − 1; MoM / YoY blank | Confirm C1 moved |
-| Model Velocity | [Ranking ML KPIs](https://docs.google.com/spreadsheets/d/1s-Q0o19dG2b5sn25kHSXlWyqJ48vt9U39Vmi6DZU6r4/edit?gid=477633216) | `Scale ML gsheet` → four df cells → **`scale_ml_actuals`** | **Auto.** QTD launches with non-zero KPI movement (excl. backtest / bug / deprec / 0 / undated) | Confirm new launches on 2026 tabs |
-| Experimentation Velocity | [Insights](https://app.hex.tech/reddit/app/Ads-Experimentation-Insights-031Wg80FsfMFpb7daAPehQ/latest) QTD card | `Scale exp treatment starts df` → **`scale_exp_actuals`**; else **`_EXP_COUNTS`** | **Auto if SQL runs.** QTD distinct experiments (Ads Exp, `unique_objects > 1000`). Read **QTD not YTD** | If SQL down: update `_EXP_COUNTS[(year, quarter)]` from QTD card after month close |
-| Ads SOTA ML | [Pillar doc readout](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) | **`scale_sota_actuals`** (`_SOTA_BY_Q`) | Scan latest pillar update for quarter grade — **B−** today. MoM / QoQ / YoY blank | Scan doc; if grade changed, update `_SOTA_BY_Q` |
+| Metric                   | Tracking source                                                                                                                      | Notebook path → variable                                                  | Value & comps                                                                                                                                                 | Monthly action                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Operational Excellence   | [Manager Dashboard](https://docs.google.com/spreadsheets/d/1hox9yMMDwBwnJOGt9GiweFafCH7wWGGwsKlUfGWJ_sU/edit?gid=876519945)          | `Scale OE gsheet` → `Scale OE df` → `scale_oe_actuals`                    | **Auto.** Sum of team scores at latest completed month-end (skip summary rows). MoM / QoQ / YoY = same-team % change vs prior month, prior-Q-end, or Dec 2025 | Confirm new month column (~1 mo lag OK)                                            |
+| Cloud Savings            | [Efficiencies tracker](https://docs.google.com/spreadsheets/d/1FHwfDergUSuQUV68f6j445i2_TQhBvpHeRlmie9SNEY/edit?gid=915660352) C1/E1 | `Scale cloud gsheet` → `Scale cloud df` → `scale_cloud_actuals`           | **Auto.** YTD from C1 (checksum if unreadable). QoQ = (YTD − Q1 − Q2) ÷ Q2 − 1; MoM / YoY blank                                                               | Confirm C1 moved                                                                   |
+| Model Velocity           | [Ranking ML KPIs](https://docs.google.com/spreadsheets/d/1s-Q0o19dG2b5sn25kHSXlWyqJ48vt9U39Vmi6DZU6r4/edit?gid=477633216)            | `Scale ML gsheet` → four df cells → `scale_ml_actuals`                    | **Auto.** QTD launches with non-zero KPI movement (excl. backtest / bug / deprec / 0 / undated)                                                               | Confirm new launches on 2026 tabs                                                  |
+| Experimentation Velocity | [Insights](https://app.hex.tech/reddit/app/Ads-Experimentation-Insights-031Wg80FsfMFpb7daAPehQ/latest) QTD card                      | `Scale exp treatment starts df` → `scale_exp_actuals`; else `_EXP_COUNTS` | **Auto if SQL runs.** QTD distinct experiments (Ads Exp, `unique_objects > 1000`). Read **QTD not YTD**                                                       | If SQL down: update `_EXP_COUNTS[(year, quarter)]` from QTD card after month close |
+| Ads SOTA ML              | [Pillar doc — Subjective readout](https://docs.google.com/document/d/10Q-ua5sQ4cUy3U1kvPO8kCS9I2m386mtwksWaMNDy_c/edit?tab=t.o2eroxuo1vpt) | `Scale foundations actuals` → `scale_sota_actuals` (auto-scan)            | Hex picks **most recent dated grade** in Subjective readout (**B−** today). MoM / QoQ / YoY blank                                                              | Confirm new readout posted — no Hex edit                                           |
 
 
 **After any notebook edit:** `Scale foundations actuals` → `CATS SC KPIs Metrics` → `CATS SC KPIs Table`. Verification only → wait for 9:00 run.
@@ -230,7 +236,7 @@ Publish once the draft looks right, then record notebook constant edits in the *
 
 Run this after the S-pillar team closes the month, usually in the first week (~20 minutes). The 9:00 run re-reads connected sheets automatically — your job is to **verify sources updated**, not re-type numbers.
 
-**Scale Our Foundations:** Follow the **Actuals** table in [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis) (Step 2). Use the **Monthly action** column for each row. Only Experimentation (when SQL is down) and SOTA (when the pillar doc grade changes) need notebook edits.
+**Scale Our Foundations:** Follow the **Goals** and **Actuals** tables in [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis) (Step 2). Goals auto-pull from Roadmap KPIs — verify only. Only Experimentation (when SQL is down) needs a notebook edit among Scale actuals.
 
 ## Revenue / Sales + Marketing FTE
 
@@ -246,9 +252,9 @@ The row title reads `(LTM as of <month>)` and should show the last month that ha
 
 **Owner: Vinay Sridhar.** His team updates the paced QTD target each week on the [shopping pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) (`Q{n} DPA tracker` tab, column **AO**).
 
-**You do not edit Hex for this.** The 9:00 run reads column AO via `C performance goals ad df with cpv` → `cats_kpi_sheet_goals` → `CATS SC KPIs Metrics`.
+**You do not edit Hex for this.** The 9:00 run picks the **latest row where col B ≤ `latest_date`**, reads the paced QTD from **col AO** on that row, via `C performance goals ad df with cpv` → `cats_kpi_sheet_goals` → `CATS SC KPIs Metrics`.
 
-If pacing colour looks wrong after the sheet was updated, confirm the current quarter's tab exists and column AO has the current week's row — then run `C performance goals ab gsheet` through `CATS SC KPIs Table` to verify today.
+If pacing colour looks wrong after the sheet was updated, confirm the current quarter's tab exists, column B has the week date, and column AO has the target — then run `C performance goals ab gsheet` through `CATS SC KPIs Table` to verify today.
 
 ---
 
@@ -258,7 +264,7 @@ You will rarely change these, but you should know where they live in case an own
 
 Every row has a **status rule**: a named string that turns value and goal into a colour. The rule is set in that tab's Metrics cell through `.with_status(...)`, alongside a plain-English `definition` that becomes the tooltip. The rules themselves are implemented in the **Status Strategies** cell.
 
-The rules currently in use (10 total — see `[docs/goaling/REFERENCE_status_policies.md](../goaling/REFERENCE_status_policies.md)`):
+The rules currently in use (10 total):
 
 
 | Rule                 | Green                                        | Yellow     | Red   | Used by                                                                                                                                         |
@@ -309,16 +315,16 @@ Only these 10 rule names are valid. An unrecognised string raises a `ValueError`
 Start with the clock before investigating any single metric. Open the draft and read the output of `**Quarter dates based on latest date**` — it prints the clock date, the freshest date available, and the status of every source.
 
 
-| What you see                                     | What it means                                                        | What to do                                                                                                                                                                                                               |
-| ------------------------------------------------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Clock moved back a day or two                    | A source is slightly behind, within the 3-day tolerance              | Nothing — normal pipeline timing                                                                                                                                                                                         |
-| A metric shows `—` and an orange banner names it | Its source is more than 3 days behind and was dropped from the clock | Note the source in the banner; escalate to the warehouse owner if it persists                                                                                                                                            |
-| `WARN systemic freshness incident`               | Most sources are behind — a warehouse-wide problem                   | Do not trust pacing colours; flag before anyone reads the numbers                                                                                                                                                        |
-| A Scale row matches last month exactly           | The sheet was not updated, or the pull failed back to a checksum     | Check the sheet, then ask Nikhil                                                                                                                                                                                         |
-| An A/B goal is suddenly blank                    | A label in the goals sheet was renamed and no longer matches the map | Compare the sheet label to **Canonical Metric Map** / **C performance goals ad df with cpv** output. See [Post-Install CPA A/B vs plain CPA](#post-install-cpa-ab-vs-plain-cpa).                                         |
-| A goal column looks like last quarter's          | The sheet was never rolled                                           | Confirm with the owner and get the sheet rolled. The next 9:00 run picks it up; run its source cells if you need to see it today                                                                                         |
-| Shopping pacing colour looks wrong               | Pacing sheet tab or column AO not updated for the current week       | Confirm `Q{n} DPA tracker` col AO on the [pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712); re-run goals chain → KPI Metrics → Table |
-| Budget Utilization is empty                      | Intentional — source table died 2 June 2026                          | Leave it. Dana owns replace-or-retire                                                                                                                                                                                    |
+| What you see                                     | What it means                                                        | What to do                                                                                                                                                                                                                                            |
+| ------------------------------------------------ | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Clock moved back a day or two                    | A source is slightly behind, within the 3-day tolerance              | Nothing — normal pipeline timing                                                                                                                                                                                                                      |
+| A metric shows `—` and an orange banner names it | Its source is more than 3 days behind and was dropped from the clock | Note the source in the banner; escalate to the warehouse owner if it persists                                                                                                                                                                         |
+| `WARN systemic freshness incident`               | Most sources are behind — a warehouse-wide problem                   | Do not trust pacing colours; flag before anyone reads the numbers                                                                                                                                                                                     |
+| A Scale row matches last month exactly           | The sheet was not updated, or the pull failed back to a checksum     | Check the sheet, then ask Nikhil                                                                                                                                                                                                                      |
+| An A/B goal is suddenly blank                    | A label in the goals sheet was renamed and no longer matches the map | Compare the sheet label to **Canonical Metric Map** / **C performance goals ad df with cpv** output. See [Post-Install CPA A/B vs plain CPA](#post-install-cpa-ab-vs-plain-cpa).                                                                      |
+| A goal column looks like last quarter's          | The sheet was never rolled                                           | Confirm with the owner and get the sheet rolled. The next 9:00 run picks it up; run its source cells if you need to see it today                                                                                                                      |
+| Shopping pacing colour looks wrong               | Pacing sheet tab or col B/AO not updated for the current week        | Confirm `Q{n} DPA tracker` col **B** (week) + **AO** (target) on the [pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712); re-run goals chain → KPI Metrics → Table |
+| Budget Utilization is empty                      | Intentional — source table died 2 June 2026                          | Leave it. Dana owns replace-or-retire                                                                                                                                                                                                                 |
 
 
 Two rules worth repeating: a `0` means the metric really was zero, and a dash means we do not have the data — never convert a failed pull into a zero. And never re-run the whole notebook to fix a stale row; find the source cell and run that.
@@ -362,7 +368,7 @@ Two things it does not cover: Hex project access and publishing sit with the cur
 - [ ] Every owner has confirmed the goals are **final** for the new quarter — a populated sheet is not a confirmation. Includes HQ Signal, which has no sheet at all.
 - [ ] Company Level: MAA, DAUq and A/B sheets confirmed rolled; `IMPRESSIONS_GOALS` updated from Daily Forecast – Live
 - [ ] KPIs: Roadmap KPIs + pacing sheet + Rev/FTE sheet confirmed; goals chain run → KPI Table verified
-- [ ] Scale: `_SOTA_BY_Q` has a key for the new quarter; `_EXP_COUNTS` / fallbacks updated if SQL was down at roll
+- [ ] Scale: Roadmap KPIs tab has Q4 / 2026 Goal columns for OE, Cloud, Model Velocity, Experimentation; `_EXP_COUNTS` updated if SQL was down at roll
 - [ ] GTM: Metrics → Table re-run (actuals-only rows; no goal sync needed)
 - [ ] Supply: table re-run
 - [ ] Draft reviewed, then published
@@ -376,5 +382,5 @@ Two things it does not cover: Hex project access and publishing sit with the cur
 
 **Weekly**
 
-- [ ] Vinay's team updated column AO on the current quarter's DPA tracker tab
+- [ ] Vinay's team updated col B (week) + AO (target) on the current quarter's DPA tracker tab
 - [ ] After Monday 9:00 run (or spot-check): Shopping pacing colour on KPI tab looks right

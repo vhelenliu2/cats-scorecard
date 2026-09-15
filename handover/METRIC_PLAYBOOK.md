@@ -179,7 +179,7 @@ Breakouts: `dauq`, `dauq_us` (geo US), `dauq_row` (everyone else, including unkn
 - **Value:** Brand feed QTD / YTD (not summed here)
 - **Color:** Upper Funnel rule ($2M yellow)
 - **Actuals:** `reddit-ads-prod.ads_ds_metrics.brand_pillar_daily_comprehensive_summary`.`brand_revenue`, GLOBAL — same as the [Brand Pillar](https://app.hex.tech/reddit/app/Brand-Pillar-Business-Overview-Dashboard-6mNDevMXkAFJjOGjuervnI/latest?tab=revenue_summary) revenue tab
-- **Goals:** CQ / FY $310M / $1.1B. QTD = CQ × CATS day-elapsed
+- **Goals:** CQ / FY from [brand goals doc](https://docs.google.com/document/d/1wujsIOOkqapGknYdUNIjxekxpd90qsRM4ByoADJtvR8/edit?tab=t.0#bookmark=id.sw1mjrnh4i0a) (Progress to Revenue Goal 2026). QTD = CQ × CATS day-elapsed
 - **Watch:** `% of top 200 brand advertisers who adopt 3+ best practices` is not on this tab.
 
 ---
