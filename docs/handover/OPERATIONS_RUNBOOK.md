@@ -234,6 +234,8 @@ Publish once the draft looks right, then record notebook constant edits in the *
 
 # Part 2 — Monthly upkeep
 
+**Fragility (actuals): High** — metrics in this section need monthly human verification; failed pulls can look healthy until you check the source.
+
 Run this after the S-pillar team closes the month, usually in the first week (~20 minutes). The 9:00 run re-reads connected sheets automatically — your job is to **verify sources updated**, not re-type numbers.
 
 **Scale Our Foundations:** Follow the **Goals** and **Actuals** tables in [Scale Our Foundations](#scale-our-foundations-cats-sc--kpis) (Step 2). Goals auto-pull from Roadmap KPIs — verify only. Only Experimentation (when SQL is down) needs a notebook edit among Scale actuals.
@@ -249,6 +251,8 @@ The row title reads `(LTM as of <month>)` and should show the last month that ha
 ---
 
 # Weekly — Shopping Revenue pacing goal
+
+**Fragility (actuals): High** — weekly verification required (Shopping Revenue QTD from warehouse + pacing colour on the KPI tab).
 
 **Owner: Vinay Sridhar.** His team updates the paced QTD target each week on the [shopping pacing sheet](https://docs.google.com/spreadsheets/d/1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8/edit?gid=1861501712#gid=1861501712) (`Q{n} DPA tracker` tab, column **AO**).
 
