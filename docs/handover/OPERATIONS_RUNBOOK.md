@@ -268,7 +268,7 @@ You will rarely change these, but you should know where they live in case an own
 
 Every row has a **status rule**: a named string that turns value and goal into a colour. The rule is set in that tab's Metrics cell through `.with_status(...)`, alongside a plain-English `definition` that becomes the tooltip. The rules themselves are implemented in the **Status Strategies** cell.
 
-The rules currently in use (10 total — see `[docs/goaling/REFERENCE_status_policies.md](../goaling/REFERENCE_status_policies.md)`):
+The rules currently in use (10 total):
 
 
 | Rule                 | Green                                        | Yellow     | Red   | Used by                                                                                                                                         |
@@ -307,7 +307,7 @@ Company Level DAUq is the clearest example: it runs `impressions_pacing` when it
 1. Open the Hex draft → **Status Strategies** cell.
 2. Edit the strategy class for that rule (thresholds are in the class body, e.g. `GoalBinaryStatusStrategy`).
 3. If row assignments changed, update `**ACTIVE_STATUS_RULES**` at the top of the same cell.
-4. Update the matching row in [REFERENCE_status_policies.md](../goaling/REFERENCE_status_policies.md) and in the Status colors section of [How the scorecard works](HOW_THE_SCORECARD_WORKS.md) — all three lists have to move together or they drift apart again.
+4. Update the matching row in the table above and in the Status colors section of [How the scorecard works](HOW_THE_SCORECARD_WORKS.md) — both lists have to move together or they drift apart again.
 5. Run **Status Strategies** → affected tab **Metrics** → **Table**.
 
 Only these 10 rule names are valid. An unrecognised string raises a `ValueError` and the whole tab fails to build. Do not add legacy rules “just in case”.

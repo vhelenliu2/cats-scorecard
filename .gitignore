@@ -1,0 +1,10 @@
+# Local Hex CLI home — contains credentials and logs
+.hex-home/
+
+# Scratch exports and notebook dumps from local debugging
+.tmp-*
+
+# Per-run ingest artifacts; only _state/ is tracked
+docs/ingestion/runs/
+
+.DS_Store

@@ -1,0 +1,93 @@
+{
+  "hex_project_id": "01975b00-b9bb-7006-9858-cb987fd035ae",
+  "hex_draft_url": "https://app.hex.tech/reddit/hex/CATS-Scorecard-030A2d4xbWcyM2JNhvw0Ks/draft/logic",
+  "governance_sheet_id": "1SDYpd5icuyBI-raKcaRX7zUBHjtxfWqz1aSj2x15Tvc",
+  "staging": {
+    "title": "CATS Scorecard Staging (Phase 1)",
+    "spreadsheet_id_env": "CATS_STAGING_SHEET_ID",
+    "facts_tab": "Staging Facts",
+    "review_tab": "Staging Review Queue",
+    "run_log_tab": "Ingest Run Log",
+    "share_with": ["v.helen.liu@reddit.com"]
+  },
+  "hex_cells": {
+    "dauq_targets_gsheet": "01a03ad4-284f-739b-830e-0e0e57986e6e",
+    "maa_goals_gsheet": "01a03ad4-284f-739b-830e-11f730ed4164",
+    "dauq_official_targets_df": "01a03ad4-284f-739b-830e-173ab390d051",
+    "maa_goals_df": "01a03ad4-284f-739b-830e-1aeb35887eb3",
+    "company_level_goals_df": "01a03ad4-284f-739b-830f-613e682f98a8"
+  },
+  "pilot_metrics": [
+    {
+      "metric_id": "MET-B61F39994E32",
+      "display_name": "MAA (R28D), #",
+      "hex_display_name": "MAA (R28D), #",
+      "field_kind": "goal",
+      "tier": "Tier 0",
+      "status_rule": "qtd_vs_current_q_goal",
+      "source_id": "SRC-949D378F932A",
+      "source_name": "MAB Goaling 2026",
+      "source_sheet_id": "1obYe6RSkOoQG9gDKFJJNRO7FzvLm6LyTX7xXVwiXLdc",
+      "source_tab": "Daily Goals Allocation",
+      "source_gid": 908340562,
+      "source_url": "https://docs.google.com/spreadsheets/d/1obYe6RSkOoQG9gDKFJJNRO7FzvLm6LyTX7xXVwiXLdc/edit?gid=908340562#gid=908340562",
+      "extractor": "maa_goals",
+      "owner_id": "OWN-C7F2E02C77AF",
+      "unit": "count",
+      "dashboard_fields": ["current_quarter", "qtd", "fy"],
+      "aliases": []
+    },
+    {
+      "metric_id": "MET-419D6C123B19",
+      "display_name": "DAUq (QTD), M",
+      "hex_display_name": "DAUq (QTD), #",
+      "field_kind": "goal",
+      "tier": "Tier 0",
+      "status_rule": "impressions_pacing",
+      "source_id": "SRC-0D79B1616D99",
+      "source_name": "DAUq Master Sheet",
+      "source_sheet_id": "1eu21vkHhHYNAFmY_tsxlCe3Gk1Mz_ieYdtZDT41gvXQ",
+      "source_tab": "Latest Forecast",
+      "source_gid": 964936431,
+      "source_url": "https://docs.google.com/spreadsheets/d/1eu21vkHhHYNAFmY_tsxlCe3Gk1Mz_ieYdtZDT41gvXQ/edit?gid=964936431#gid=964936431",
+      "extractor": "dauq_goals",
+      "owner_id": "OWN-2FDEC88BD914",
+      "unit": "users",
+      "dashboard_fields": ["current_quarter", "qtd"],
+      "aliases": ["DAUq (QTD), #"],
+      "notes": "Registry name uses M; Hex parent name uses #. Always join on metric_id. Latest Forecast stores millions; staging stores absolute users. QTD target = CQ target (mean metric, no day-elapsed pace-down)."
+    }
+  ],
+  "unregistered_segments": [
+    {
+      "display_name": "MAA - Global LCS (R28D), #",
+      "parent_metric_id": "MET-B61F39994E32",
+      "extractor": "maa_goals",
+      "column": "Global LCS"
+    },
+    {
+      "display_name": "MAA - Global MM (R28D), #",
+      "parent_metric_id": "MET-B61F39994E32",
+      "extractor": "maa_goals",
+      "column": "Global MM"
+    },
+    {
+      "display_name": "MAA - Global SMB (R28D), #",
+      "parent_metric_id": "MET-B61F39994E32",
+      "extractor": "maa_goals",
+      "column": "Global SMB"
+    },
+    {
+      "display_name": "DAUq - US (QTD), #",
+      "parent_metric_id": "MET-419D6C123B19",
+      "extractor": "dauq_goals",
+      "section": "US"
+    },
+    {
+      "display_name": "DAUq - ROW (QTD), #",
+      "parent_metric_id": "MET-419D6C123B19",
+      "extractor": "dauq_goals",
+      "section": "ROW"
+    }
+  ]
+}
