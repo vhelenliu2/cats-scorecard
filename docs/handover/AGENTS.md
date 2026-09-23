@@ -156,7 +156,73 @@ A failure blocks only the affected metric and is visible in `Run Audit`; it neve
 - **Monthly (second week):** Tier 1 → compute + stage Scale ×5 and S+M FTE (flag any Scale row identical to last month as a possible failed pull → checksum); Tier 2 → verify monthly/warehouse freshness + goals present; confirm the FTE month landed (Nick Asaad).
 - **Weekly (3rd day):** Tier 1 → stage Shopping Revenue pacing (col AO + week-over-week check); Tier 2 → confirm the weekly A/B trackers updated ([Ads Launch Review](https://docs.google.com/spreadsheets/d/1rcmx-lOT73K5q19stLt7Io-UijoP9nkMrcrnyNFVu0s/edit?gid=1457726925), [Shopping 3H](https://docs.google.com/spreadsheets/d/1YidL22qkkaKdfbHX6EViyUCnTF2_dnl1vEDdE46obV0/edit?gid=90038934)) and that no A/B goal blanked from a renamed label (A/B grey in months 1–2 is expected).
 
-## 8. Interface, agent prompt & acceptance
+## 8. Tier-2 verification, maintenance & notifications
+
+Tier 2 is **verify-only**: the 9:00 AM Chicago run already recomputes these rows, so the agent never recomputes or re-stages a value. Its job is to (a) confirm each row can still be trusted, (b) record a **check status**, and (c) when something is stale / missing / broken, raise a **routed notification with a proposed solution** — never a silent fix, and never an edit to Hex or a source.
+
+### 8.1 Per-row check battery (read-only)
+
+For every Tier-2 row in the §3 register the agent runs four checks and records one `check_status`:
+1. **Source landed** — source has data within its freshness SLA vs the clock (§7). A populated cell that hasn't moved is *not* landing (checksum trap).
+2. **Goal present & rolled** — the current-quarter goal exists and is not last quarter's; required manual constants present (`IMPRESSIONS_GOALS`, SOTA map, `_EXP_COUNTS`). A populated goal cell ≠ owner confirmation at roll.
+3. **Colour computable** — the row's status rule (§5) can produce a colour (value + goal present, units compatible); if it drops to grey, confirm that's by-design.
+4. **Anomaly / integrity** — the register's **Note** catch: A/B label integrity (Post-Install CPA vs CPA vs CPI kept distinct), display-duplicate forced grey, `yoy` direction sane, zero-vs-dash preserved.
+
+`check_status` ∈ { **VERIFIED**, **NEEDS VERIFICATION**, **BLOCKED**, **INTENTIONAL** }. Recorded per row in `Run Audit` / `Findings`; no value is written.
+
+### 8.2 Freshness clock (every run)
+
+Read `Quarter dates based on latest date` first: clock date, freshest date, per-source status. A source >3 days behind → its row shows `—` and is named; **most** sources behind → `WARN systemic freshness incident`, hold **all** pacing colours and flag before anyone reads the numbers. (Same gate as §7; Tier 2 consumes it.)
+
+### 8.3 Stale / missing → notification & solution
+
+Distilled from the runbook's "When something looks stale." The agent detects the symptom, records the finding, and drafts a routed notice; the **solution is to drive the owner/source to fix**, not to edit the dashboard. Names are in the §8.5 directory.
+
+| Detected symptom | Likely cause | Agent action | Route to |
+|---|---|---|---|
+| Row `—`, source >3d behind | source late/dropped | flag NEEDS VERIFICATION; name the source; re-check next run; escalate if it persists | source / warehouse owner |
+| Most sources behind | warehouse-wide | `WARN systemic freshness incident`; hold all colours | data-eng / on-call |
+| Scale/Tier-2 row identical to last period | failed pull → checksum | flag possible failed pull; don't trust; confirm source | metric's actuals owner |
+| A/B goal suddenly blank | renamed label broke the map | flag label-integrity; show old→new label; keep Post-Install/CPA/CPI distinct | Christa Benton |
+| Goal column looks like last quarter | sheet not rolled | flag at quarter roll; request roll; next 9:00 picks it up | metric's goal owner |
+| Shopping pacing colour wrong | col AO / DPA tab not updated | flag; confirm current-week AO row | Vinay Sridhar / Ryan Sekulic |
+| Budget Utilization empty | source died 2 Jun 2026 | **INTENTIONAL** — leave, no alert | Dana (replace/retire) |
+
+### 8.4 Notification channel & escalation (guardrail-safe)
+
+- **Default = in-repo, no external writes.** Findings land in `Run Audit` / `Findings` + the run report. The agent **never** posts to Slack / Gmail / Jira / Docs without explicit per-send human approval (repo guardrail); external notices are prepared as **drafts** addressed to the owner in §8.5.
+- **Escalation ladder:** 1st occurrence → record + draft owner ping · persists ≥ *N* runs (configurable) → escalate to on-call / data-eng · systemic freshness → immediate WARN + hold colours.
+- **Respect, don't fix:** intentional blanks / greys / duplicates and manual constants are `INTENTIONAL` / flagged for a human — never edited.
+
+### 8.5 Contact directory (who to notify per metric)
+
+Single source of truth for contacts is the [CATS Scorecard Data Governance sheet](https://docs.google.com/spreadsheets/d/1SDYpd5icuyBI-raKcaRX7zUBHjtxfWqz1aSj2x15Tvc); this table is a convenience mirror, reconciled to it at quarter roll. **Never guess a contact** — if a row is not listed here, look it up in the governance sheet before contacting anyone.
+
+| Metric / scope | Contact(s) | What they own |
+|---|---|---|
+| Scale ×5 — OE, Cloud, Model Velocity, Experimentation, SOTA | Nikhil Khanted *(actuals)* · Virgilio Pigliucci *(goals/rates)* | source landed; FY/CQ rates |
+| Ads SOTA ML (grade + grade→rank map) | Virgilio Pigliucci | pillar-doc grade readout + approved map |
+| Revenue / S+M FTE | Nick Asaad *(FTE month)* · Aaron Nelson *(goal/waypoints)* | headcount; ratio waypoints |
+| Shopping Revenue (pacing) | Vinay Sridhar *(col AO / DPA tab)* · Ryan Sekulic *(CQ/FY goal)* | weekly AO; quarter goal |
+| Ads Realized Revenue | Bassem Haddad · Evie Sarkes | `daily_quota_profile` quota |
+| MAA (+ LCS / MM / SMB) | Ye Liu · Pengfei Qiao · Paola Madueno | MAB Goaling daily goals |
+| DAUq (Company + Supply copy) | Logan Wilson | DAUq Master Latest Forecast |
+| Ad Impressions (US / ROW) | Yoni Sauerbrun · Yona Kuritzky | `IMPRESSIONS_GOALS` / Daily Forecast |
+| Overall Measured Revenue | Anirudha Sundaresan | quarterly step |
+| Upper Funnel Revenue | Emily Glauser | brand CQ/FY |
+| High Quality Signal Adoption | Aayush Shah · Emre Enes Yavuz | reference target (no sheet) |
+| A/B lifts + Tier-2 A/B (incl. Post-Install CPA) | Christa Benton | goal labels / renamed-label map |
+| Shopping ROAS A/B | Ryan Sekulic · Lillian Kravitz | new-quarter row |
+| Budget Utilization | Dana | replace/retire (source died 2 Jun 2026) |
+| Hex project access & publishing | current Hex project owner | draft → publish |
+| Warehouse-wide / systemic freshness incident | data-eng / on-call *(per governance sheet)* | warehouse outages |
+| eCPM · Thriving · gROAS · Reach/Frequency/Depth · Retention · MixShift iCR/CPA · New Advertisers · Marketplace Efficiency · Input Demand — % Booking to Quota · WAUq · Monetizable Feed · PDP · GTM Shopping copies | **→ CATS Data Governance sheet** (no named owner in runbook) | look up before contacting |
+
+### 8.6 How Tier 2 is tested
+
+A `verify` dry-run reads the config + the clock and emits, per Tier-2 row, the four checks + `check_status` + any drafted notification (with the §8.5 contact) — writing only to `Findings` (no values, no external send). Because the MVP has no live warehouse, tests drive it with a **simulated clock / source-status fixture** (fresh · 4-days-behind · systemic-incident · un-rolled-goal · renamed-A/B-label · dead-source) and assert the expected `check_status` + routed draft for each — mirroring the Tier-1 local-export test path.
+
+## 9. Interface, agent prompt & acceptance
 
 **Inputs:** `as_of_date` (default: latest completed reporting date) · `environment` (`staging`) · `write_mode` (`dry_run` | `write_staging`) · source + approved-goal config · runtime credential reference.
 
@@ -180,4 +246,6 @@ run report: status, as-of, source status, each row, findings, overrides, and evi
 - S+M FTE reports the latest headcount month and never mixes months across sources.
 - A failed source never overwrites the last known good result; re-running identical inputs is idempotent.
 - Tier-2 rows carry a check status; intentional blanks, greys, and duplicates are preserved, not "fixed."
+- A stale / missing / broken Tier-2 source produces a **routed notification draft** (owner from the §8.5 directory / governance sheet) and never an external auto-send without approval.
+- A systemic freshness incident holds all pacing colours before any publish.
 - Two consecutive live staging cycles pass schema, freshness, uniqueness, reconciliation, and goal checks before any dashboard promotion.
