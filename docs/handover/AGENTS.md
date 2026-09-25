@@ -4,6 +4,8 @@
 
 A repeatable agent that keeps the CATS Scorecard current: it **ingests** the high-risk metrics (compute → validate → stage) and **verifies** every other row, using the [Operations Runbook](OPERATIONS_RUNBOOK.md) as the source of truth.
 
+> **Implementation status.** Tier 1 of this plan is built and runnable in [`agent/`](agent/README.md); its skill definition is [`agent/SKILL.md`](agent/SKILL.md). Tier 2 (§8) is specified here but has no code yet.
+
 **Guardrails (always):** staging-only; sources read-only; never edit the Hex dashboard or any source workbook; never guess a tab, header row, goal, or mapping; `0` means zero and `—` means no data (never turn a failed pull into a `0`); hold anything uncertain as `NEEDS VERIFICATION` rather than publishing it.
 
 ## 2. Operating model — tiers, cadence, flags

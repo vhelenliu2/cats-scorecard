@@ -1,0 +1,16 @@
+{
+  "_note": "Read-only transcription of '(June 26) CATS Roadmap Planning Q3 2026 - KPIs' PDF, KPIs tab. Goal values copied verbatim. Columns: 2026 (FY) Goal, Q1/Q2/Q3 Product Goals. Nothing computed or guessed. This is the goal source of truth for Scale + Rev/FTE + Measured Revenue.",
+  "source_id": "scale_goals_roadmap_kpis",
+  "source_as_of": "2026-06",
+  "named_cells": {
+    "operational_excellence": {"fy_2026": "+40% by EOY (increase on avg team scores)", "q1": "+20%", "q2": "+10%", "q3": "+5%", "basis": "QoQ % increase on AVERAGE team scores"},
+    "cloud_savings": {"fy_2026_usd": 10000000, "q1_ytd_usd": 100000, "q2_ytd_usd": 800000, "q3_ytd_usd": 7500000, "note": "COR savings; FY target progression $5.3M -> $6.8M -> $10M (stretch)"},
+    "model_velocity": {"fy_2026": "+25% YoY (Ranking ML launches)", "q1": "+6.25%", "q2": "+12.50%", "q3": "+19.00%"},
+    "experimentation_velocity": {"fy_2026": "+33% YoY", "q1": "+8.25%", "q2": "+16.50%", "q3": "+25.00%"},
+    "ads_sota_ml": {"fy_2026_goal": "avg grade C -> B-", "q3_note": "Goal for 2026: C -> C+ (avg grade)"},
+    "revenue_per_sm_fte": {"fy_2026_ltm_usd": 3700000, "q1_ltm_usd": 3070000, "q2_ltm_usd": 3200000, "q3_ltm_usd": 3400000, "note": "Revenue / (Sales + Marketing FTE), LTM productivity"},
+    "measured_revenue": {"fy_2026_usd": 1500000000, "q1_usd": 200000000, "q2_usd": 350000000, "q3_usd": 450000000},
+    "shopping_roas_ab": {"fy_2026": "60% A/B", "q1": "15% A/B", "q2": "15% A/B", "q3": "15% A/B"},
+    "brand_revenue": {"fy_2026_usd": 1100000000, "q3_note": "$310M (tbc w Sales Strat)"}
+  }
+}

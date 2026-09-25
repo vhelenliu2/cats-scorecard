@@ -7,4 +7,9 @@
 # Per-run ingest artifacts; only _state/ is tracked
 docs/ingestion/runs/
 
+# Generated staging workbooks from the ingestion agent (reproducible per run)
+docs/handover/agent/staging_output/
+__pycache__/
+*.pyc
+
 .DS_Store

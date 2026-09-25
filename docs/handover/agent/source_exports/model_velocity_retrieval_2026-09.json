@@ -1,0 +1,23 @@
+{
+  "_note": "Read-only transcription of 'Ranking ML KPIs - 2026 Retrieval KPIs' PDF -> Launches (Marketplace Tracker). impact = representative primary KPI value (%). date = launch date (ISO); TBD -> null. Verbatim from source.",
+  "source_id": "model_velocity_retrieval",
+  "source_as_of": "2026-09",
+  "rows": [
+    {"name": "GAT model with App Install Heads", "quarter": "Q1", "kpi": "iIR,piIR", "impact": 3.2, "date": "2026-01-24", "status": "Launched"},
+    {"name": "GAT with PET Features and Calibration Fixes", "quarter": "Q1", "kpi": "VTR6", "impact": 0.45, "date": "2026-03-16", "status": "Launched"},
+    {"name": "Retrieval Ad Level Passthrough and TopK Tuning", "quarter": "Q2", "kpi": "CTR,kiCR,piIR,VTR6", "impact": 3.68, "date": "2026-04-09", "status": "Launched"},
+    {"name": "AT-GAT Merged Layer", "quarter": "Q2", "kpi": "kiCR,piIR", "impact": 3.5, "date": "2026-04-23", "status": "Launched"},
+    {"name": "GAT Model Launch - Streaming Features Phase 1", "quarter": "Q2", "kpi": "kiCR,iIR", "impact": 1.5, "date": "2026-04-30", "status": "Launched"},
+    {"name": "Retrieval Launch - CPV6 Head + FE", "quarter": "Q2", "kpi": "VTR6,piIR,CTR", "impact": 2.66, "date": "2026-05-15", "status": "Launched"},
+    {"name": "Decoupled GAT", "quarter": "Q2", "kpi": "VTR6", "impact": 0.49, "date": "2026-06-16", "status": "Launched"},
+    {"name": "GAT Model Launch - Kumo Deprecation + SnooGNN v3", "quarter": "Q2", "kpi": "VTR6,piIR", "impact": 0.285, "date": "2026-06-16", "status": "Launched", "type": "deprecation"},
+    {"name": "Retrieval Passthrough Capping Reduction", "quarter": "Q2", "kpi": "Conversion AVI", "impact": 2.567, "date": "2026-06-24", "status": "Launched"},
+    {"name": "AT-GAT Merged Layer - upper funnel", "quarter": "Q2", "kpi": "VTR6", "impact": 0.000, "date": "2026-06-30", "status": "Launched"},
+    {"name": "International Keyword Model", "quarter": "Q2", "kpi": "kiCR", "impact": 0.77, "date": "2026-06-30", "status": "Launched"},
+    {"name": "Retrieval GAT PyTorch Launch", "quarter": "Q3", "kpi": "CTR,VTR6,Conversion AVI,kiCR,App AVI,iIR,piIR", "impact": 1.295, "date": "2026-08-07", "status": "Launched"},
+    {"name": "Retrieval TopK Increase with Lower Passthrough Cap", "quarter": "Q3", "kpi": "CTR,VTR6,Conversion AVI,kiCR", "impact": 0.726, "date": "2026-08-06", "status": "Launched"},
+    {"name": "Retrieval Launch - CPV15 Head + NLB 6s + NLB 15s", "quarter": "Q3", "kpi": "CTR,VTR6", "impact": 2.957, "date": null, "status": "Launched"},
+    {"name": "Lower Funnel GAT Feature Eng - Last 20 Pixel Ids and PET features", "quarter": "Q3", "kpi": "VTR6,Conversion AVI,kiCR,iIR,piIR", "impact": 3.238, "date": null, "status": "Launched"},
+    {"name": "GAT Model Launch - SnooGNN App + 42D Training + Listing Below", "quarter": "Q3", "kpi": "Click AVI,iIR,piIR", "impact": 2.776, "date": null, "status": "Launched"}
+  ]
+}

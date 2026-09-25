@@ -1,0 +1,25 @@
+{
+  "_note": "Read-only transcription of 'Shopping 3H Performance Goals and Tracker - 2026 - Launch Impact Tracker' PDF -> ROAS Actuals. impact = ROAS* Estimate (%). date = launch date (ISO); missing/undated -> null. status Launched/In-progress/Not Started copied verbatim. Only 'Launched' + dated + positive-impact rows qualify for Model Velocity.",
+  "source_id": "model_velocity_shopping",
+  "source_as_of": "2026-09",
+  "rows": [
+    {"name": "RTG pipeline & isHighQuality only targeting", "quarter": "Q3", "kpi": "ROAS_est", "impact": 1.75, "date": "2026-07-20", "status": "Launched"},
+    {"name": "HG Project: Bypass AT experiment", "quarter": "Q3", "kpi": "ROAS_est", "impact": null, "date": null, "status": "In-progress"},
+    {"name": "Contextual selector V2: fine tuned embeddings + pytorch migration", "quarter": "Q3", "kpi": "ROAS_est", "impact": 1, "date": "2026-06-25", "status": "Launched"},
+    {"name": "Behavioral model iteration V5", "quarter": "Q3", "kpi": "ROAS_est", "impact": 2, "date": "2026-09-05", "status": "Launched"},
+    {"name": "Broader retargeting / order of products", "quarter": "Q3", "kpi": "ROAS_est", "impact": 1.75, "date": "2026-09-09", "status": "Launched"},
+    {"name": "Behavioral pytorch migration /BFE migration", "quarter": "Q3", "kpi": "ROAS_est", "impact": 0, "date": null, "status": "In-progress"},
+    {"name": "Offline selector deprecation", "quarter": "Q3", "kpi": "ROAS_est", "impact": 0, "date": "2026-08-12", "status": "Launched", "type": "deprecation"},
+    {"name": "Light ranker v1", "quarter": "Q3", "kpi": "ROAS_est", "impact": 5, "date": "2026-08-20", "status": "Launched"},
+    {"name": "pCVR Hex dashboard", "quarter": "Q3", "kpi": "ROAS_est", "impact": 0, "date": null, "status": "In-progress"},
+    {"name": "ESMM/ESCM: Merged pCTR head with pkCVR", "quarter": "Q3", "kpi": "ROAS_est", "impact": 6, "date": "2026-09-29", "status": "Launched"},
+    {"name": "Behavioral model iteration Q3", "quarter": "Q3", "kpi": "ROAS_est", "impact": 2, "date": null, "status": "In-progress"},
+    {"name": "pCVR model iteration (feature eng, RTG features, feature pruning)", "quarter": "Q3", "kpi": "ROAS_est", "impact": 3, "date": null, "status": "Launched"},
+    {"name": "Revamp of user gender feature", "quarter": "Q3", "kpi": "ROAS_est", "impact": 0, "date": null, "status": "Launched"},
+    {"name": "Unattr Conversions Tuning", "quarter": "Q3", "kpi": "ROAS_est", "impact": 3, "date": null, "status": "Not Started"},
+    {"name": "pkCVR August (Feature store migration, multiple conversions)", "quarter": "Q3", "kpi": "ROAS_est", "impact": 3, "date": null, "status": "Not Started"},
+    {"name": "pCTR Model iteration July (format data collections, PLAs)", "quarter": "Q3", "kpi": "ROAS_est", "impact": 1, "date": "2026-07-07", "status": "Launched"},
+    {"name": "calibrating pCTR on PLA", "quarter": "Q3", "kpi": "ROAS_est", "impact": 0, "date": null, "status": "In-progress"},
+    {"name": "Improved measurement & observability for retrieval", "quarter": "Q3", "kpi": "ROAS_est", "impact": 0, "date": null, "status": "Launched"}
+  ]
+}

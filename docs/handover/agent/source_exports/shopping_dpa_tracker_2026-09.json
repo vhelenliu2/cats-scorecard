@@ -1,0 +1,26 @@
+{
+  "_note": "Read-only transcription of 'Q3 2026 - Shopping DPA Tracker - Q3 DPA Tracker' PDF (Weekly Q3 Tracker, data as of 09-21-26). named_cells = clear top-summary. rows = weekly QTD revenue series ('Actual Rev QTD' column) in USD. Values verbatim; nothing computed. NOTE: the time-phased col-AO weekly paced goal from the separate Shopping pacing sheet is NOT in this export, so QTD_goal/pace stays unconfirmed.",
+  "source_id": "shopping_dpa_tracker",
+  "source_as_of": "2026-09-20",
+  "named_cells": {
+    "q3_goal_usd": 22000000,
+    "qtd_revenue_usd": 18000000,
+    "ytd_revenue_usd": 46100000,
+    "data_as_of": "2026-09-21"
+  },
+  "rows": [
+    {"week": "2026-07-01", "qtd_rev_usd": 800000},
+    {"week": "2026-07-05", "qtd_rev_usd": 2600000},
+    {"week": "2026-07-12", "qtd_rev_usd": 4200000},
+    {"week": "2026-07-19", "qtd_rev_usd": 6300000},
+    {"week": "2026-07-26", "qtd_rev_usd": 7700000},
+    {"week": "2026-08-02", "qtd_rev_usd": 9400000},
+    {"week": "2026-08-09", "qtd_rev_usd": 10400000},
+    {"week": "2026-08-16", "qtd_rev_usd": 11800000},
+    {"week": "2026-08-23", "qtd_rev_usd": 13400000},
+    {"week": "2026-08-30", "qtd_rev_usd": 14800000},
+    {"week": "2026-09-06", "qtd_rev_usd": 15800000},
+    {"week": "2026-09-13", "qtd_rev_usd": 17600000},
+    {"week": "2026-09-20", "qtd_rev_usd": 18000000}
+  ]
+}

@@ -23,6 +23,7 @@ The scorecard is a Hex app. It rebuilds at **9:00 AM Chicago time**.
 | [HOW_THE_SCORECARD_WORKS.md](HOW_THE_SCORECARD_WORKS.md) | Why the numbers behave as they do — clock, colors, deliberate exceptions |
 | [METRIC_PLAYBOOK.md](METRIC_PLAYBOOK.md) | One card per live row — owner, source, how the number is built |
 | [AGENTS.md](AGENTS.md) | Build plan for a staging-only ingestion agent (Scale, S+M FTE, Shopping Revenue pacing) |
+| [agent/](agent/README.md) | The agent itself — runnable Tier-1 ingestion code, plus [SKILL.md](agent/SKILL.md), the skills pack that defines it |
 
 Read in this order. Stop when you have what you need.
 
@@ -33,6 +34,7 @@ Read in this order. Stop when you have what you need.
 | 3 | [How the scorecard works](HOW_THE_SCORECARD_WORKS.md) | Why the numbers behave as they do — clock, colors, deliberate exceptions |
 | 4 | [Metric playbook](METRIC_PLAYBOOK.md) | One card per live row — owner, source, how the number is built |
 | 5 | [Agents build plan](AGENTS.md) | Spec for automating Scale, FTE, and Shopping pacing into a staging sheet |
+| 6 | [The agent](agent/README.md) | The code that implements Tier 1 of that plan, how to run it, and what is still open |
 
 ## Where to go
 
@@ -40,3 +42,4 @@ Read in this order. Stop when you have what you need.
 - A number looks wrong and you want to know whether it is intentional → **how it works**
 - You need one metric's owner or warehouse table → **playbook** (search the list)
 - You are building or running the staging ingestion agent → **agents build plan**
+- You want to actually run it, or see which rows still need an owner's sign-off → **[the agent](agent/README.md)**

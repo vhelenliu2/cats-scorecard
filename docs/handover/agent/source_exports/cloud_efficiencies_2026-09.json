@@ -1,0 +1,32 @@
+{
+  "_note": "Read-only transcription of the provided PDF export of the Efficiencies tracker (Ads Cost Savings / Efficiencies '26). The named_cells block captures the summary cells the runbook reads (C1 = YTD 'COR Savings to date'). Values copied verbatim; nothing computed or guessed.",
+  "source_id": "cloud_efficiencies_tracker",
+  "source_as_of": "2026-09",
+  "named_cells": {
+    "C1_ytd_cor_savings_to_date": "$9,187,001",
+    "fy_2026_cor_savings_goal": "$10,000,000",
+    "remaining_cor_savings": "$812,999"
+  },
+  "rows": [
+    {"initiative": "rddt-ads-measurement1-nonprod.signals_foundation - table deletion", "approval_status": "Finance Approved", "poc": "Rashad Laher", "projected_annualized_savings": "$360,000", "actual_savings": "$270,000.00"},
+    {"initiative": "BQ Optimizations", "approval_status": "Finance Approved", "poc": "Anthony Sandoval", "projected_annualized_savings": "$1,200,000", "actual_savings": "$675,000.00"},
+    {"initiative": "GCS TTL Optimiation", "approval_status": "Finance Approved", "poc": "Anant Furia", "projected_annualized_savings": "$900,000", "actual_savings": "$970,692.00"},
+    {"initiative": "pCTR GISv3 Launch", "approval_status": "Finance Approved", "poc": "Cedric Blondeau", "projected_annualized_savings": "$4,900,000.00", "actual_savings": "$2,540,000.00"},
+    {"initiative": "GISv3 (all other heavy rankers)", "approval_status": "Pending Approval", "poc": "Cedric Blondeau", "projected_annualized_savings": "$3,100,000.00", "actual_savings": ""},
+    {"initiative": "Ads-Privacy optimization w/Adaptive Admission/Concurrency", "approval_status": "Finance Approved", "poc": "Gopal Rajpurohit", "projected_annualized_savings": "$41,250.00", "actual_savings": "$41,250.00"},
+    {"initiative": "Identified 1.8PB in excess S3 storage due to misconfigured buckets", "approval_status": "Finance Approved", "poc": "Peter Fryer-Davis", "projected_annualized_savings": "$400,000.00", "actual_savings": "$315,000.00"},
+    {"initiative": "tGRPC/ORCA Migration", "approval_status": "Finance Approved", "poc": "Evan Rossi", "projected_annualized_savings": "$4,000,000", "actual_savings": "$3,856,797.00"},
+    {"initiative": "Stateless Corrections", "approval_status": "Finance Approved", "poc": "Allyson Clark", "projected_annualized_savings": "$164,000.00", "actual_savings": "$111,150.00"},
+    {"initiative": "Scale-to-Zero Ads Model Servers Using KEDA + GIS Traffic Signals", "approval_status": "Pending Approval", "poc": "Andrei Guzun", "projected_annualized_savings": "$1,686,000.00", "actual_savings": "$0.00"},
+    {"initiative": "Ads Spark Optimization & Platformization", "approval_status": "N/A", "poc": "Sam Wheating", "projected_annualized_savings": "$0.00", "actual_savings": "$0.00"},
+    {"initiative": "GPU Serving", "approval_status": "N/A", "poc": "Yiran Zhao", "projected_annualized_savings": "$3,000,000.00", "actual_savings": "$0.00"},
+    {"initiative": "Inference/Auction from Shard to Ad Selector", "approval_status": "N/A", "poc": "Andy Zhang", "projected_annualized_savings": "$0.00", "actual_savings": "$0.00"},
+    {"initiative": "AT layer deprecation as part of AT <> GAT merge", "approval_status": "Work In Progress", "poc": "Manuel Serrano", "projected_annualized_savings": "$550,000.00", "actual_savings": "$0.00"},
+    {"initiative": "Feature Pruning exercises in AT<>GAT layer", "approval_status": "N/A", "poc": "Swanand Wakankar", "projected_annualized_savings": "$20,000.00", "actual_savings": "$0.00"},
+    {"initiative": "Ads GFS migrating SH Redis -> to SH ValKey", "approval_status": "Finance Approved", "poc": "Zack Keim", "projected_annualized_savings": "$406,000.00", "actual_savings": ""},
+    {"initiative": "Terminate TransUnion Contract for 3P age data for model training", "approval_status": "", "poc": "", "projected_annualized_savings": "$550,000.00", "actual_savings": ""},
+    {"initiative": "Deprecate Comscore", "approval_status": "", "poc": "", "projected_annualized_savings": "$500,000.00", "actual_savings": ""},
+    {"initiative": "3P age segment costs", "approval_status": "", "poc": "", "projected_annualized_savings": "$1,500,000.00", "actual_savings": ""},
+    {"initiative": "Eyeo GmbH. Adblock plus browser extension vendor", "approval_status": "", "poc": "", "projected_annualized_savings": "$3,000,000.00", "actual_savings": ""}
+  ]
+}

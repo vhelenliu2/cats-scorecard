@@ -1,0 +1,379 @@
+# =============================================================================
+# CATS Scale + Revenue/FTE Ingestion Skill — Source & Goal Registry
+# =============================================================================
+# MVP scope: staging-only. This file is the single source of truth for WHERE
+# data comes from and WHAT the approved goals are. The pipeline reads ONLY the
+# sources listed here, and writes ONLY to `staging_target` below.
+#
+# RULES (from BUILD_PLAN.md §2, §3, §5):
+#   - Never guess a source tab, header row, goal value, or grade mapping.
+#   - Anything not yet confirmed by the owner MUST stay as the sentinel
+#     `CONFIRM` (for values) or `null` (for header rows). The pipeline will emit
+#     REVIEW/BLOCKED for that metric rather than fabricating a number.
+#   - `spreadsheet_id`s listed here (and in safety.py FORBIDDEN_TARGETS) are
+#     read-only. The writer refuses to target any of them.
+# =============================================================================
+
+version: 1
+as_of_policy: "latest_completed_reporting_date"   # overridable per run via --as-of
+
+# -----------------------------------------------------------------------------
+# Where the staging output is written. This is the ONLY write target.
+# Must be DISTINCT from every source/dashboard id (enforced in safety.py).
+# -----------------------------------------------------------------------------
+staging_target:
+  # Default MVP writer: a brand-new local workbook, fully isolated from prod.
+  kind: "local_xlsx"                 # one of: local_xlsx | google_sheet
+  local_dir: "staging_output"
+  # For google_sheet mode, set an explicit staging spreadsheet id that you own.
+  # It must NOT appear in any source/dashboard list. Left null on purpose.
+  google_spreadsheet_id: null
+  tabs:
+    output: "Staging Output"
+    raw_rows: "Raw Rows"
+    audit: "Run Audit"
+    methodology: "Methodology"
+
+# -----------------------------------------------------------------------------
+# Credentials are referenced BY NAME only. Never inline secrets here.
+# -----------------------------------------------------------------------------
+credentials:
+  google_sheets: "GOOGLE_SHEETS_CONNECTION"   # env var / secret-store key name
+  warehouse: "WAREHOUSE_CONNECTION"
+  scopes_readonly:
+    - "https://www.googleapis.com/auth/spreadsheets.readonly"
+    - "https://www.googleapis.com/auth/documents.readonly"
+    - "https://www.googleapis.com/auth/drive.readonly"
+
+# -----------------------------------------------------------------------------
+# SOURCE REGISTRY — read-only. Every id here is protected from writes.
+# header_row: null  => not yet confirmed; adapter reads but calc emits REVIEW.
+# -----------------------------------------------------------------------------
+sources:
+  scale_goals_roadmap_kpis:
+    label: "CATS Roadmap Planning — KPIs tab"
+    type: "local_export"       # TEST WIRING: read-only PDF export transcription
+    export_file: "source_exports/roadmap_kpis_q3_2026.json"
+    spreadsheet_id: "1Dj-qIRj4tOXP_kdSBtOT2BFVTqzR4rws2VrwwkkuBmw"
+    gid: 114524236
+    tab_name: "KPIs"
+    header_row: 1               # confirmed from provided export
+    cadence: "quarterly"
+    freshness_sla_days: 100
+    owner: "Virgilio Pigliucci"
+    verifier: "Nikhil Khanted"
+
+  oe_manager_dashboard:
+    label: "Manager Dashboard (Operational Excellence team scores)"
+    # TEST WIRING: read from the read-only PDF export transcription so the same
+    # normalize -> validate -> calculate -> stage pipeline runs without live
+    # Google credentials. spreadsheet_id/gid are kept for provenance + deny-list.
+    type: "local_export"
+    export_file: "source_exports/oe_manager_dashboard_2026-09.json"
+    spreadsheet_id: "1hox9yMMDwBwnJOGt9GiweFafCH7wWGGwsKlUfGWJ_sU"
+    gid: 876519945
+    tab_name: "Manager Dashboard"   # confirmed from the provided source export
+    header_row: 1                    # confirmed from the provided source export
+    cadence: "monthly"
+    freshness_sla_days: 45      # ~1 month lag is OK per runbook
+    owner: "Scale team"
+    verifier: "Nikhil Khanted"
+
+  cloud_efficiencies_tracker:
+    label: "Efficiencies tracker (Cloud Savings C1/E1)"
+    # TEST WIRING: read from the read-only PDF export transcription (see note above).
+    type: "local_export"
+    export_file: "source_exports/cloud_efficiencies_2026-09.json"
+    spreadsheet_id: "1FHwfDergUSuQUV68f6j445i2_TQhBvpHeRlmie9SNEY"
+    gid: 915660352
+    tab_name: "Ads Cost Savings_Efficiencies '26"  # confirmed from provided export
+    header_row: 1                    # confirmed from the provided source export
+    ytd_cell: "C1"              # per runbook; QoQ uses (YTD - Q1 - Q2)/Q2 - 1
+    checksum_cell: "E1"
+    cadence: "monthly"
+    freshness_sla_days: 45
+    owner: "Scale team"
+    verifier: "Nikhil Khanted"
+
+  model_velocity_ranking:
+    label: "Model Velocity — Ranking launches"
+    type: "local_export"       # TEST WIRING: read-only PDF export transcription
+    export_file: "source_exports/model_velocity_ranking_2026-09.json"
+    spreadsheet_id: "1s-Q0o19dG2b5sn25kHSXlWyqJ48vt9U39Vmi6DZU6r4"
+    gid: 477633216
+    tab_name: "Ranking ML KPIs"  # confirmed from provided export
+    header_row: 1
+    cadence: "monthly"
+    freshness_sla_days: 45
+    owner: "Scale team"
+    verifier: "Nikhil Khanted"
+
+  model_velocity_retrieval:
+    label: "Model Velocity — Retrieval launches"
+    type: "local_export"       # TEST WIRING: read-only PDF export transcription
+    export_file: "source_exports/model_velocity_retrieval_2026-09.json"
+    spreadsheet_id: "1s-Q0o19dG2b5sn25kHSXlWyqJ48vt9U39Vmi6DZU6r4"
+    gid: 972292259
+    tab_name: "Retrieval KPIs"   # confirmed from provided export
+    header_row: 1
+    cadence: "monthly"
+    freshness_sla_days: 45
+    owner: "Scale team"
+    verifier: "Nikhil Khanted"
+
+  model_velocity_shopping:
+    label: "Model Velocity — Shopping launches (3H Tracker)"
+    type: "local_export"       # TEST WIRING: read-only PDF export transcription
+    export_file: "source_exports/model_velocity_shopping_2026-09.json"
+    spreadsheet_id: "1YidL22qkkaKdfbHX6EViyUCnTF2_dnl1vEDdE46obV0"
+    gid: 90038934
+    tab_name: "Launch Impact Tracker"  # confirmed from provided export
+    header_row: 1
+    cadence: "monthly"
+    freshness_sla_days: 45
+    owner: "Scale team"
+    verifier: "Nikhil Khanted"
+
+  experimentation_sql:
+    label: "Experimentation Velocity — Ads experiment records (warehouse SQL)"
+    type: "warehouse"
+    query_ref: "sql/experimentation_qtd.sql"   # distinct experiments, unique_objects > 1000
+    cadence: "daily"
+    freshness_sla_days: 4
+    owner: "Scale team"
+    verifier: "Nikhil Khanted"
+
+  experimentation_qtd_card:
+    label: "Experimentation Velocity — Insights QTD card (Hex app)"
+    type: "hex_app"             # Hex-only: BLOCKED adapter (no service-account read)
+    hex_app: "Ads-Experimentation-Insights-031Wg80FsfMFpb7daAPehQ"
+    cadence: "daily"
+    owner: "Scale team"
+
+  sota_pillar_sheet:
+    label: "S-pillar updates sheet (Ads SOTA ML grade by quarter)"
+    # Source of record moved off the 2026 S-Scale Pillar DOC: the Google Docs API
+    # is not enabled for the Hex service account, only Sheets.
+    type: "local_export"       # TEST WIRING: read-only PDF export transcription
+    export_file: "source_exports/sota_pillar_2026-08.json"
+    spreadsheet_id: "1tuD0BGUVPiMUd8jA8fckjteCLoqgBE6DnkgnzY2x2WA"
+    gid: 0
+    tab_name: CONFIRM          # not yet read live; confirm with Virgilio Pigliucci
+    header_row: null           # unknown until the tab is confirmed
+    cadence: "monthly"
+    freshness_sla_days: 45
+    owner: "Scale team"
+    verifier: "Nikhil Khanted"
+
+  rev_fte_sheet:
+    label: "S+M HC Forecast sheet (headcount)"
+    type: "local_export"       # TEST WIRING: read-only PDF export transcription
+    export_file: "source_exports/sm_fte_hc_forecast_2026-07.json"
+    spreadsheet_id: "1QbL630aVJMygNhIHg_dCSWeUNpzd_PDbWZjyQn9WWTk"
+    gid: 971510625
+    tab_name: "S&M Summary"      # confirmed from provided export
+    header_row: 1
+    cadence: "monthly"
+    freshness_sla_days: 45
+    owner: "Nick Asaad"
+    verifier: "Aaron Nelson"
+
+  shopping_dpa_tracker:
+    label: "Shopping DPA / pacing tracker (weekly QTD revenue)"
+    type: "local_export"       # TEST WIRING: read-only PDF export transcription
+    export_file: "source_exports/shopping_dpa_tracker_2026-09.json"
+    spreadsheet_id: "1zQFWUxWWY0hIrnU1AVPGkEdJ9O1-emddDZMh0nxN-s8"
+    gid: 1861501712
+    tab_name: "Q3 DPA Tracker"   # confirmed from provided export
+    header_row: 1
+    cadence: "weekly"
+    freshness_sla_days: 10
+    owner: "Vinay Sridhar"
+    verifier: "Ryan Sekulic"
+
+  revenue_warehouse:
+    label: "Revenue (warehouse, monthly)"
+    type: "warehouse"
+    query_ref: "sql/revenue_monthly.sql"
+    cadence: "monthly"
+    freshness_sla_days: 10
+    owner: "Aaron Nelson"
+
+# -----------------------------------------------------------------------------
+# METRIC REGISTRY — binds each metric to its adapters, calc, and goal record.
+# direction: "up" => higher is better (goal_binary green >= 100%).
+# -----------------------------------------------------------------------------
+metrics:
+  operational_excellence:
+    display: "Operational Excellence"
+    unit: "score"
+    direction: up
+    calc: "operational_excellence"
+    actual_sources: [oe_manager_dashboard]
+    goal_ref: operational_excellence
+    # value = OE score; the goal is a QoQ growth RATE, so pace/status compare QoQ.
+    compare_field: "QoQ"
+
+  cloud_savings:
+    display: "Cloud Savings"
+    unit: "usd"
+    direction: up
+    calc: "cloud_savings"
+    actual_sources: [cloud_efficiencies_tracker]
+    # Named cell the calc reads for YTD (never guessed; matches export named_cells).
+    ytd_named_cell: "C1_ytd_cor_savings_to_date"
+    goal_ref: cloud_savings
+
+  model_velocity:
+    display: "Model Velocity"
+    unit: "count"
+    direction: up
+    calc: "model_velocity"
+    actual_sources: [model_velocity_ranking, model_velocity_retrieval, model_velocity_shopping]
+    goal_ref: model_velocity
+
+  experimentation_velocity:
+    display: "Experimentation Velocity"
+    unit: "count"
+    direction: up
+    calc: "experimentation_velocity"
+    actual_sources: [experimentation_sql]
+    fallback_sources: [experimentation_qtd_card]
+    goal_ref: experimentation_velocity
+    # _EXP_COUNTS manual fallback (SQL down): QTD count read off the Insights QTD
+    # card / S-Scale KPI reading. Fully evidenced -> staged but flagged REVIEW.
+    manual_override:
+      value: 141
+      owner: "Nikhil Khanted"
+      timestamp: "2026-09-20T00:00:00Z"
+      reason: "Experimentation SQL unavailable; QTD distinct-experiment count read off the Insights QTD card, cross-checked to the S-Scale KPI reading (141 QTD for Q3 2026)."
+      evidence: "S-Scale Our Foundations KPI Update (Aug 24 2026): 'Experimentation Velocity 56% QTD (141 QTD vs 151 for Q3 25)'"
+
+  ads_sota_ml:
+    display: "Ads SOTA ML"
+    unit: "grade"
+    direction: up
+    calc: "ads_sota_ml"
+    actual_sources: [sota_pillar_sheet]
+    goal_ref: ads_sota_ml
+
+  # Per owner decision, this row is the RATIO: Revenue / (Sales + Marketing FTE),
+  # LTM productivity (Roadmap KPIs goal $3.4M Q3 / $3.7M FY). Needs a revenue actual
+  # (warehouse LTM revenue) paired to the SAME month as the FTE headcount.
+  revenue_per_sm_fte:
+    display: "Revenue / S+M FTE"
+    unit: "usd_per_fte"
+    direction: up
+    calc: "revenue_fte"
+    actual_sources: [revenue_warehouse, rev_fte_sheet]
+    goal_ref: revenue_per_sm_fte
+
+  shopping_revenue:
+    display: "Shopping Revenue (pacing)"
+    unit: "usd"
+    direction: up
+    calc: "shopping_revenue"
+    status_rule: "shopping_pace"
+    actual_sources: [shopping_dpa_tracker]
+    goal_ref: shopping_revenue
+
+# -----------------------------------------------------------------------------
+# GOAL REGISTRY — explicit, approved goal records.
+# NOTHING here is guessed. Until an owner confirms, keep:
+#   approval_status: pending   and   value fields: CONFIRM
+# The pacing engine refuses to compute a pace for any unapproved / CONFIRM goal
+# and emits REVIEW (BUILD_PLAN.md §5).
+# -----------------------------------------------------------------------------
+goals:
+  operational_excellence:
+    source_ref: scale_goals_roadmap_kpis
+    kpi_row: "M10n / Operational Excellence"
+    # PULLED from Roadmap KPIs: FY +40% by EOY; Q3 +5% (QoQ % increase on AVG team
+    # scores). This is a growth-RATE goal compared against the actual's QoQ growth
+    # (runbook: "status compares QoQ to that rate, not Value"), NOT an absolute
+    # target for the summed score. Our OE actual is a SUM with no clean QoQ from
+    # this source, so the units don't line up -> held pending (methodology decision).
+    # OE goal is a QoQ GROWTH RATE compared to the actual's QoQ growth (runbook:
+    # "status compares QoQ to that rate, not Value"). The metric row surfaces BOTH
+    # the OE score (value) and the QoQ growth (compare_field: QoQ).
+    pacing_rule: "oe_qoq_rate"
+    current_quarter_goal: 0.05          # Q3 rate: +5% increase (from Roadmap KPIs)
+    goal_2026: 0.40                     # FY: +40% by EOY (+20/+10/+5/+5)
+    owner: "Virgilio Pigliucci"
+    approval_status: approved
+    approval_evidence: "Roadmap KPIs Q3 2026: OE '+40% by EOY'; Q3 '+5% increase on avg team scores'."
+
+  cloud_savings:
+    source_ref: scale_goals_roadmap_kpis
+    kpi_row: "Cloud Savings"
+    pacing_rule: "linear_fy_months"     # FY target * completed_months/12 (runbook)
+    current_quarter_goal: 7500000        # Q3 YTD target from Roadmap KPIs
+    goal_2026: 10000000                  # FY COR savings target (stretch)
+    owner: "Virgilio Pigliucci"
+    approval_status: approved
+    approval_evidence: "Roadmap KPIs Q3 2026: Cloud Savings FY $10M; Q3 $7.5M YTD (COR savings)."
+
+  model_velocity:
+    source_ref: scale_goals_roadmap_kpis
+    kpi_row: "Model Velocity"
+    pacing_rule: "yoy_elapsed"          # LY same-elapsed count * (1 + FY rate)
+    fy_yoy_rate: 0.25                    # PULLED: +25% YoY (Ranking ML launches)
+    ly_same_elapsed_count: 15           # S-Scale: "15 in Q3 '25" (per owner approval)
+    goal_2026: 0.25
+    owner: "Virgilio Pigliucci"
+    approval_status: approved
+    approval_evidence: "Roadmap KPIs Q3 2026: Model Velocity +25% YoY. LY same-elapsed count 15 from S-Scale KPI reading ('15 in Q3 25'), approved by owner."
+
+  experimentation_velocity:
+    source_ref: scale_goals_roadmap_kpis
+    kpi_row: "Experimentation Velocity"
+    pacing_rule: "yoy_elapsed"
+    fy_yoy_rate: 0.33                    # PULLED: +33% YoY
+    ly_same_elapsed_count: 151          # S-Scale: "151 for Q3 '25" (per owner approval)
+    ly_full_quarter_count: 151
+    goal_2026: 0.33
+    owner: "Virgilio Pigliucci"
+    approval_status: approved
+    approval_evidence: "Roadmap KPIs Q3 2026: Experimentation Velocity +33% YoY. LY same-elapsed count 151 from S-Scale KPI reading ('151 for Q3 25'), approved by owner. NOTE: value 141 is still the evidenced _EXP_COUNTS fallback (SQL down) -> row stays REVIEW pending sign-off."
+
+  ads_sota_ml:
+    source_ref: scale_goals_roadmap_kpis
+    kpi_row: "Ads SOTA ML"
+    pacing_rule: "grade_linear"         # rank = 1.7 + 1.3*(months/12), needs mapping
+    grade_to_rank_map: null             # NOT in KPI PDF: approved letter<->rank mapping
+    fy_goal_grade: "B-"                 # PULLED: FY goal 'C -> B-' (Q3 col also says 'C -> C+')
+    goal_2026: CONFIRM
+    owner: "Virgilio Pigliucci"
+    approval_status: pending            # needs approved grade->rank map to pace
+    approval_evidence: "Roadmap KPIs Q3 2026: Ads SOTA ML 'avg grade C -> B-' (Q3 col conflicts: 'C -> C+')."
+
+  revenue_per_sm_fte:
+    source_ref: rev_fte_sheet
+    pacing_rule: "waypoint_interpolation"
+    ltm_point: true                      # LTM targets are point goals, not phased in-quarter
+    quarterly_waypoints:                 # PULLED from Roadmap KPIs (LTM productivity)
+      "Q1 2026": 3070000
+      "Q2 2026": 3200000
+      "Q3 2026": 3400000
+    goal_2026: 3700000
+    owner: "Aaron Nelson"
+    approval_status: approved
+    approval_evidence: "Roadmap KPIs Q3 2026: Revenue / S+M FTE = $3.07M/$3.2M/$3.4M LTM (Q1/Q2/Q3), FY $3.7M."
+
+  shopping_revenue:
+    source_ref: shopping_dpa_tracker
+    pacing_rule: "external_weekly_paced" # QTD goal = pacing sheet col AO current-week
+    current_quarter_goal: 22000000       # Q3 goal shown on the DPA tracker summary
+    qtd_goal_col_ao: CONFIRM             # col AO current-week paced goal not in this export
+    goal_2026: CONFIRM                   # FY from Roadmap KPIs (not provided)
+    owner: "Ryan Sekulic"
+    approval_status: pending             # owner must confirm CQ/FY via Roadmap KPIs
+    approval_evidence: null
+
+# -----------------------------------------------------------------------------
+# Validation tolerances (BUILD_PLAN.md §7).
+# -----------------------------------------------------------------------------
+tolerances:
+  row_count_pct: 0.25          # flag if row count moves > 25% vs last good run
+  reconciliation_pct: 0.01     # derived totals must reconcile within 1%
+  pacing_min: 0.0
