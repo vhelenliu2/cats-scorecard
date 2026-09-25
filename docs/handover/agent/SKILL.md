@@ -6,11 +6,11 @@ description: Refresh the CATS Scorecard STAGING output for the seven Tier-1 metr
 # CATS Tier-1 Staging Ingestion
 
 Staging-only automation for the CATS Scorecard. Implements the Tier-1 half of
-the [`AGENTS.md`](AGENTS.md) build plan against the methodology in
-[`OPERATIONS_RUNBOOK.md`](OPERATIONS_RUNBOOK.md).
+the [`agent_build_plan.md`](agent_build_plan.md) build plan against the methodology in
+[`OPERATIONS_RUNBOOK.md`](../OPERATIONS_RUNBOOK.md).
 
 **Scope note:** only **Tier 1 (ingest)** is implemented in code. **Tier 2
-(verify)** is specified in `AGENTS.md` §8 but has no runner yet — there is no
+(verify)** is specified in `agent_build_plan.md` §8 but has no runner yet — there is no
 `--verify` flag and no `check_status` output. Do not claim Tier-2 coverage.
 
 ## Safety contract (read this first)
@@ -69,7 +69,7 @@ Sheets. Its `tab_name` is still `CONFIRM`.
 
 ## Turning a metric from REVIEW → PASS
 
-1. Confirm the source with its owner (see `AGENTS.md` §8.5 contact directory).
+1. Confirm the source with its owner (see `agent_build_plan.md` §8.5 contact directory).
 2. Fill the exact `tab_name` + `header_row` in `config/metric_config.yaml`.
 3. Set the goal record's values and flip `approval_status: approved` with
    `approval_evidence`.

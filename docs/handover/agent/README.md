@@ -6,8 +6,9 @@ an isolated staging workbook. It never touches the Hex dashboard or any source.
 
 | File | What it is |
 |---|---|
-| [`../AGENTS.md`](../AGENTS.md) | **Build plan** — tiers, cadence, metric register, methodology, status rules, validation gates, contact directory |
+| [`agent_build_plan.md`](agent_build_plan.md) | **Build plan** — tiers, cadence, metric register, methodology, status rules, validation gates, contact directory |
 | [`SKILL.md`](SKILL.md) | **Skills pack** — the agent skill definition: safety contract, how to run, inputs, REVIEW→PASS procedure, agent prompt |
+| [`skills/`](skills/README.md) | The eight skill packs built from the build plan and runbook — goal workflow (step 0 → 5 + orchestrator) and scorecard-ingest. Documentation only; see that index to make one runnable again |
 | [`../OPERATIONS_RUNBOOK.md`](../OPERATIONS_RUNBOOK.md) | Source of truth for the methodology this implements |
 
 ## Run it
@@ -30,7 +31,7 @@ Output**, **Run Audit**, **Findings**, **Raw Rows**, **Methodology**.
 Cloud Savings, Model Velocity, Experimentation Velocity, Ads SOTA ML,
 Revenue / S+M FTE, Shopping Revenue pacing.
 
-**Tier 2 (verify) is not built.** `AGENTS.md` §8 specifies the per-row check
+**Tier 2 (verify) is not built.** `agent_build_plan.md` §8 specifies the per-row check
 battery, the `check_status` values, and the routed-notification behaviour, but
 no code implements it — there is no `--verify` flag.
 

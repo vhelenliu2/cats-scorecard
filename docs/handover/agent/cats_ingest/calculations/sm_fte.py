@@ -1,6 +1,6 @@
 """S+M FTE: latest-month Sales+Marketing headcount from the HC forecast sheet.
 
-Per the build plan (AGENTS.md §3/§4) this metric is HEADCOUNT-ONLY: there is no
+Per the build plan (agent_build_plan.md §3/§4) this metric is HEADCOUNT-ONLY: there is no
 revenue join / ratio (revenue lives in the warehouse and is out of scope). It is
 actual-only, status grey until a headcount goal is approved. Comparisons are made
 on the monthly headcount series:

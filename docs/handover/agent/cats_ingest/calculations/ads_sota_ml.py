@@ -2,7 +2,7 @@
 
 MoM/QoQ/YoY blank unless comparable historical grades exist. Pacing is NOT
 computed unless an approved grade->rank mapping is configured (handled in
-goals.py -> REVIEW when missing). AGENTS.md §4.
+goals.py -> REVIEW when missing). agent_build_plan.md §4.
 """
 
 from __future__ import annotations

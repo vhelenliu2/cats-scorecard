@@ -144,7 +144,7 @@ fallbacks in Hex.
 
 ### Step 4 — Diff and hold
 
-Compare to [`docs/ingestion/_state/last_staging.json`](../../../docs/ingestion/_state/last_staging.json)
+Compare to [`docs/ingestion/_state/last_staging.json`](../../../../../docs/ingestion/_state/last_staging.json)
 when it exists.
 
 | Situation | `confidence` | `publish_ready` |
@@ -184,7 +184,7 @@ rows** — write Review Queue and stop.
 
 ### Step 7 — State
 
-Update [`docs/ingestion/_state/pilot.md`](../../../docs/ingestion/_state/pilot.md)
+Update [`docs/ingestion/_state/pilot.md`](../../../../../docs/ingestion/_state/pilot.md)
 after every run. A multi-day ingest is lost if you only track it in chat.
 
 ---
