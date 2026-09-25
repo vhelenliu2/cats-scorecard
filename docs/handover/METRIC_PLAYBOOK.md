@@ -293,19 +293,20 @@ Same as [C-performance A/B](#c-performance-ab-company-level). Names on this tab:
 
 - **Owner:** Virgilio Pigliucci
 - **Tabs:** KPI
-- **Value:** each row its own (level, YTD, count, or grade)
+- **Value:** each row its own (growth %, YTD $, or grade) — OE is **QoQ**, Model / Experimentation Velocity are **YoY**, Cloud is YTD $, SOTA is a letter grade
 - **Color:** hit or miss (`goal_binary`) — each row’s bar is its own pacing rule
 - **Actuals:** pillar Google Sheets, pinned monthly (~1 month lag: September still shows July)
 - **Goals:** see table
 - **Watch:** a failed pin can sit on a checksum and still look healthy. Do not reuse retired names Marketplace Efficiency or Ads Tier0 Availability.
+- **Renamed Sep 2026** (names drive the glossary lookup — change both together): `Operational Excellence (as of {month}), sum` → `Operational Excellence (QoQ, {month})`; `Model Velocity (QTD), #` → `Model Velocity (YoY, Q{n} {year})`; `Experimentation Velocity (QTD as of {month}), #` → `Experimentation Velocity (YoY, {month})`. The `, #` suffix was dropped because the value is now a percentage.
 
 | Display | Pin | Goal / pacing |
 |---|---|---|
-| Operational Excellence (as of {month}), sum | Unweighted **sum** of Manager Dashboard team scores at month-end | CQ +5%, FY +40%. QTD rate = +5% × completed months / 3. **Pacing = QoQ ÷ that rate** |
+| Operational Excellence (QoQ, {month}) | **Value = QoQ** (+x%) on the unweighted **sum** of Manager Dashboard team scores at month-end | CQ +5%, FY +40%. QTD rate = +5% × completed months / 3. **Pacing = QoQ ÷ that rate** |
 | Cloud Savings (YTD as of {month}), $ | Tracker C1 **YTD** COR savings; else pillar Q3 YTD $9.2M | FY $10M. QTD bar = FY × completed months / 12. CQ blank. QoQ uses Q1 $0.34M / Q2 $5.7M |
-| Model Velocity (QTD as of {month}), # | QTD Ranking + Retrieval + Shopping launches with KPI movement (exclude bugs / deprecations / backtests / 0). Q2 checksum 23 | FY +25% YoY. QTD = last-year same-elapsed × 1.25 |
-| Experimentation Velocity (QTD as of {month}), # | QTD distinct qualifying Ads experiments. Insights app unread; pillar checksums until SQL is granted. [Ads Experimentation Insights](https://app.hex.tech/reddit/app/Ads-Experimentation-Insights-031Wg80FsfMFpb7daAPehQ/latest) | FY +33% YoY. QTD = last-year same-elapsed × 1.33 |
-| Ads SOTA ML (as of {month}) | Subjective grade from the Scale pillar table | Path C- (Jan) → C (Q2) → B- (Q3) → B (Dec) |
+| Model Velocity (YoY, Q{n} {year}) | **Value = YoY** (+x%) = QTD ÷ the same quarter last year − 1. QTD = Ranking + Retrieval + Shopping launches with KPI movement (exclude bugs / deprecations / backtests / 0); last-year counts from the [S-pillar updates sheet](https://docs.google.com/spreadsheets/d/1tuD0BGUVPiMUd8jA8fckjteCLoqgBE6DnkgnzY2x2WA/edit?gid=0#gid=0) | CQ +19%, FY +25% YoY. QTD rate = CQ × days elapsed / total days in quarter. **Pacing = YoY ÷ that rate** |
+| Experimentation Velocity (YoY, {month}) | **Value = YoY** (+x%) = QTD vs the same elapsed window last year; level = QTD distinct qualifying Ads experiments. [Ads Experimentation Insights](https://app.hex.tech/reddit/app/Ads-Experimentation-Insights-031Wg80FsfMFpb7daAPehQ/latest) | CQ +25%, FY +33% YoY. QTD rate = CQ × days elapsed / total days in quarter. **Pacing = YoY ÷ that rate** |
+| Ads SOTA ML (as of {month}) | Subjective grade — right-most filled quarter column of the [S-pillar updates sheet](https://docs.google.com/spreadsheets/d/1tuD0BGUVPiMUd8jA8fckjteCLoqgBE6DnkgnzY2x2WA/edit?gid=0#gid=0) Ads SOTA ML row | Path C- (Jan) → C (Q2) → B- (Q3) → B (Dec) |
 
 ---
 

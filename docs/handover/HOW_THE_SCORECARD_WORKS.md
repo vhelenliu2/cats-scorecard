@@ -113,7 +113,7 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 | **A/B** | The sheet has this month (or this quarter). If a label changed, add the alias in Hex **Canonical Metric Map** and align the launch tracker column name | Run **C performance goals ab gsheet** → **C performance goals ad df with cpv**, then the affected **Metrics** → **Table** cells | Goals and values look current. Watch `Price: Post-Install CPA` → key `Post-Install CPA A/B` |
 | **MAA / DAUq goals** | MAB Daily Goals Allocation and DAUq Latest Forecast are on the new quarter | Those sheet cells, then Company Level metrics + table | The goal column matches the sheet. The DAUq sheet is in **millions**; Hex stores **users** |
 | **Sheet-backed KPI goals** | Roadmap KPIs, pacing sheet, brand feed, Rev/FTE sheet updated | Run goals chain → KPI Metrics → Table at quarter roll (9:00 run handles daily) | Goal columns match sheets |
-| **Notebook constants only** | Impressions, HQ, Scale fallbacks, `_EXP_COUNTS`, `_SOTA_BY_Q` | Edit the named cell, then its table | Goal column changed |
+| **Notebook constants only** | Impressions, HQ, Scale fallbacks, `_EXP_COUNTS` | Edit the named cell, then its table | Goal column changed |
 | **Budget** | No replacement source yet | — | Leave empty. Do not reload the June table |
 
 ### Goals that auto-pull from sheets (9:00 run)
@@ -130,7 +130,7 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 - Ad Impressions (`IMPRESSIONS_GOALS`)
 - HQ Signal *(reference only; no source)*
 - Experimentation `_EXP_COUNTS` when SQL is down
-- SOTA `_SOTA_BY_Q` when the pillar doc grade changes
+- *(SOTA grade is no longer typed in — it reads the latest quarter column of the S-pillar updates sheet)*
 - Occasional Scale goal-rate or fallback constants
 
 ### After the morning run — check these
@@ -182,7 +182,7 @@ Only these ignore sheet updates — you edit the named Hex cell:
 - Impressions
 - HQ Signal *(reference only)*
 - Experimentation `_EXP_COUNTS` when SQL is down
-- SOTA `_SOTA_BY_Q` when the pillar grade changes
+- *(SOTA grade is no longer typed in — it reads the latest quarter column of the S-pillar updates sheet)*
 - Scale fallbacks when a sheet pull fails
 
 ### Sheets that need a quarter roll
@@ -366,7 +366,7 @@ Any row can fall back to grey regardless of its strategy: a stale source, a paci
 | Google Sheets is down | MAA, DAUq, A/B, or Scale goals go grey, or we keep the last successful pull |
 | A planning-sheet row was renamed | A/B goals vanish. `Price: Post-Install CPA` must map to `Post-Install CPA A/B` |
 | The quarter sheet was not rolled | Last quarter’s target, looking current |
-| A typed-in goal was not updated | Impressions, HQ, Scale fallbacks, `_EXP_COUNTS`, `_SOTA_BY_Q` |
+| A typed-in goal was not updated | Impressions, HQ, Scale fallbacks, `_EXP_COUNTS` |
 | A sheet-backed goal looks stale | Roadmap KPIs, pacing sheet, brand feed, or Rev/FTE sheet not rolled/updated |
 | A Scale pin failed | A checksum. The row looks fine |
 
