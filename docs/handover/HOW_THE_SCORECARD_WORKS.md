@@ -130,7 +130,7 @@ Warehouse rows refresh with the 9:00 run. Confirm these next — they sit on a m
 - Ad Impressions (`IMPRESSIONS_GOALS`)
 - HQ Signal *(reference only; no source)*
 - Experimentation `_EXP_COUNTS` when SQL is down
-- *(SOTA grade is no longer typed in — it reads the latest quarter column of the S-pillar updates sheet)*
+- *(SOTA grade is no longer typed in — it reads the latest quarter column of the [S-pillar updates sheet](https://docs.google.com/spreadsheets/d/1tuD0BGUVPiMUd8jA8fckjteCLoqgBE6DnkgnzY2x2WA/edit?gid=0#gid=0))*
 - Occasional Scale goal-rate or fallback constants
 
 ### After the morning run — check these
@@ -182,7 +182,7 @@ Only these ignore sheet updates — you edit the named Hex cell:
 - Impressions
 - HQ Signal *(reference only)*
 - Experimentation `_EXP_COUNTS` when SQL is down
-- *(SOTA grade is no longer typed in — it reads the latest quarter column of the S-pillar updates sheet)*
+- *(SOTA grade is no longer typed in — it reads the latest quarter column of the [S-pillar updates sheet](https://docs.google.com/spreadsheets/d/1tuD0BGUVPiMUd8jA8fckjteCLoqgBE6DnkgnzY2x2WA/edit?gid=0#gid=0))*
 - Scale fallbacks when a sheet pull fails
 
 ### Sheets that need a quarter roll

@@ -295,7 +295,7 @@ Same as [C-performance A/B](#c-performance-ab-company-level). Names on this tab:
 - **Tabs:** KPI
 - **Value:** each row its own (growth %, YTD $, or grade) — OE is **QoQ**, Model / Experimentation Velocity are **YoY**, Cloud is YTD $, SOTA is a letter grade
 - **Color:** hit or miss (`goal_binary`) — each row’s bar is its own pacing rule
-- **Actuals:** pillar Google Sheets, pinned monthly (~1 month lag: September still shows July)
+- **Actuals:** pillar Google Sheets, pinned monthly (~1 month lag: September still shows July). Model Velocity's **last-year** quarter counts and the **Ads SOTA ML grade** come from the [S-pillar updates sheet](https://docs.google.com/spreadsheets/d/1tuD0BGUVPiMUd8jA8fckjteCLoqgBE6DnkgnzY2x2WA/edit?gid=0#gid=0) (`Sheet1`, gid 0); it is a manual snapshot, so its current-year figures are ignored
 - **Goals:** see table
 - **Watch:** a failed pin can sit on a checksum and still look healthy. Do not reuse retired names Marketplace Efficiency or Ads Tier0 Availability.
 - **Renamed Sep 2026** (names drive the glossary lookup — change both together): `Operational Excellence (as of {month}), sum` → `Operational Excellence (QoQ, {month})`; `Model Velocity (QTD), #` → `Model Velocity (YoY, Q{n} {year})`; `Experimentation Velocity (QTD as of {month}), #` → `Experimentation Velocity (YoY, {month})`. The `, #` suffix was dropped because the value is now a percentage.
